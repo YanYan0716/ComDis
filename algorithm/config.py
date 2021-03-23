@@ -7,7 +7,7 @@ ROOT_PATH = ''
 TRAIN_PATH = '/content/cifar/train.csv'
 IMG_SIZE = 256
 CROP_SIZE = 224
-BATCH_SIZE = 32
+BATCH_SIZE = 2
 
 # model
 BACKBONE_ARCH = 'resnet18'

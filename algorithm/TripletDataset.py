@@ -1,4 +1,5 @@
 import sys
+sys.path.append('/content/ComDis')
 sys.path.append('./')
 import os
 from torch.utils import data

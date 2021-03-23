@@ -1,4 +1,5 @@
 import sys
+sys.path.append('/content/ComDis')
 sys.path.append('./')
 import torch
 import torchvision.transforms as transforms
@@ -124,3 +125,6 @@ def main():
         lrSche=cosWarmUp,
         testDS=test_loader,
     )
+
+if __name__ == '__main__':
+    main()
