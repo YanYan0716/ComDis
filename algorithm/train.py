@@ -47,7 +47,7 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
                 avgLoss = avgLoss / config.LOG_BATCHSIZE*anchorFts.size(0)
                 tLoss = tLoss / config.LOG_BATCHSIZE*anchorFts.size(0)
                 cLoss = cLoss / config.LOG_BATCHSIZE*anchorFts.size(0)
-                print(f'[epoch:%3d/' % (epoch) + 'EPOCH: %3d]:' % config.TOTAL_EPOCH + '\tbatchSize: %3d' % idx
+                print(f'[epoch:%3d/' % (epoch) + 'EPOCH: %3d]' % config.TOTAL_EPOCH + '%3d:' % idx
                       + '\t[LOSS: %.4f]' % avgLoss + '[Trip Loss: %.4f' % tLoss + '\tClass Loss: %.4f]' % cLoss)
                 avgLoss = 0
                 tLoss = 0
