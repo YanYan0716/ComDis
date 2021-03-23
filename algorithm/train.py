@@ -109,7 +109,11 @@ def main():
     Triplet_loss = torch.nn.TripletMarginLoss(margin=0.8, p=2)
     Classifier_loss = torch.nn.BCEWithLogitsLoss()
     # optimizer
-    optim = torch.optim.SGD(lr=config.LR, momentum=config.MOMENTUM)
+    optim = torch.optim.SGD(
+        params=net.parameters,
+        lr=config.LR,
+        momentum=config.MOMENTUM
+    )
     cosWarmUp = Cos_warmup(
         optim,
         epoch_warmup=config.WARMUP_EPOCH,
