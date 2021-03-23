@@ -1,8 +1,12 @@
 from flask import Flask
-from flask import render_template
+from flask import render_template, request, flash, redirect, url_for
+from flask_bootstrap import Bootstrap
+import os
+from werkzeug.utils import secure_filename
 
 
 app = Flask(__name__)
+bootstrap = Bootstrap(app)
 
 
 @app.route('/hello')

@@ -5,6 +5,7 @@ sys.path.append('./ComDis')
 from torch.optim.lr_scheduler import LambdaLR
 import math
 import torch
+import os
 import matplotlib.pyplot as plt
 
 
@@ -23,8 +24,11 @@ def Cos_warmup(optimizer, epoch_warmup, epoch_training, num_cycles=0.5, last_epo
 
 
 def save_checkpoint(state, savepath):
+    if os.path.exists(savepath) is False:
+        os.mkdir(savepath)
+    save_dir = os.path.join(savepath, 'best.pth.tar')
     try:
-        torch.save(state, savepath)
+        torch.save(state, save_dir)
     except:
         print('save failed !!!, please check again !!!')
 

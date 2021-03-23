@@ -28,7 +28,7 @@ MOMENTUM = 0.9
 TOTAL_EPOCH = 300
 LOG_BATCHSIZE = 50
 EVAL = 1
-SAVE_PATH = './weights/Best.pth'
+SAVE_PATH = './algorithm/weights'
 # eval
 # TEST_PATH = '/content/cifar/test.csv'  # google
 TEST_PATH = '../input/cifar10/cifar/test.csv'

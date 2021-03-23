@@ -8,6 +8,7 @@ import torch
 import random
 
 import algorithm.config as config
+from algorithm.utils import save_checkpoint
 
 
 class Model(nn.Module):
@@ -55,8 +56,13 @@ def test():
     x = torch.cat([x, x, x, x], dim=0)
     print(x.shape)
     M = Model(fts_dim=config.FTS_DIM)
-    out1, out2 = M(x, torch.tensor([1, 0]))
-    print(out1.shape, out2.shape)
+    state = {
+        'epoch': 3,
+        'model': M.state_dict()
+    }
+    save_checkpoint(state, config.SAVE_PATH)
+    # out1, out2 = M(x, torch.tensor([1, 0]))
+    # print(out1.shape, out2.shape)
 
 
 if __name__ == '__main__':
