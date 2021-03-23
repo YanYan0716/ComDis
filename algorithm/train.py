@@ -55,7 +55,7 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
                 cLoss = 0
         lrSche.step()
         if epoch % config.EVAL == 0:
-            acc = evalution(testDS, model)
+            acc, corr_num, total_num = evalution(testDS, model)
             if BAcc < acc:
                 BAcc = acc
                 state = {
@@ -64,7 +64,8 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
                 }
                 save_checkpoint(state=state, savepath=config.SAVE_PATH)
                 print(f'saving model to {config.SAVE_PATH} ..........................')
-            print(f'eval ...\t [acc: %.4f' % acc + '/ BAcc: %.4f]' % BAcc)
+            print(f'eval ...\t [acc: %.2f' % acc + '/ BAcc: %.4f]' % BAcc
+                  + '[corr_num: %5d' % corr_num + '/ total num: %6d]' % total_num)
 
 
 def main():

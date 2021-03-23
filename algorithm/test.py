@@ -28,5 +28,5 @@ def evalution(dataLoader, model):
         output = torch.sigmoid(output).ge(0.5).type(torch.float32).squeeze(dim=-1)
         result = output.eq(mask).type(torch.float32)
         correct_number += torch.sum(result)
-    acc = correct_number / total_number
-    return acc
+    acc = correct_number / total_number * 100
+    return acc, correct_number, total_number
