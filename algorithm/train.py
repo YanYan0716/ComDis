@@ -35,7 +35,7 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
             loss1 = Triplet_loss(anchorFts, posFts, negFts)
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
-            loss2 = Classifier_loss(out2.sequeeze(dim=-1), mask)
+            loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)
             loss = loss1+loss2
             avgLoss += loss
             tLoss += loss1
