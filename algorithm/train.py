@@ -11,6 +11,7 @@ from algorithm.TripletDataset import TripletDataset
 from algorithm.model import Model
 from algorithm.utils import Cos_warmup, save_checkpoint
 from algorithm.test import evalution
+import algorithm.trans as trans
 
 
 def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testDS=None):
@@ -21,6 +22,7 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
         avgLoss = 0
         for idx, (anchor, pos1, pos2, neg, mask) in enumerate(dataLoader):
             anchor, pos1, pos2, neg = anchor.to(config.DEVICE), pos1.to(config.DEVICE), pos2.to(config.DEVICE), neg.to(config.DEVICE)
+            mask = mask.to(config.DEVICE)
             imgs = torch.cat([anchor, pos1, pos2, neg], dim=0)
 
             optim.zero_grad()
@@ -29,7 +31,9 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
             posFts = out1[config.BATCH_SIZE : config.BATCH_SIZE*2]
             negFts = out1[-config.BATCH_SIZE: ]
             loss1 = Triplet_loss(anchorFts, posFts, negFts)
-            loss2 = Classifier_loss(out2, mask)
+            out2 = out2.type(torch.float32)
+            mask = mask.type(torch.float32)
+            loss2 = Classifier_loss(out2.sequeeze(dim=-1), mask)
             loss = loss1+loss2
             avgLoss += loss
             loss.backward()
@@ -54,22 +58,10 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
 def main():
     # dataset
     train_trans = {
-        'OriTrans': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
-        'PosTrans1': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
-        'PosTrans2': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
-        'NegTrans': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
+        'OriTrans': trans.OriTrain,
+        'PosTrans1': trans.PosTrans1,
+        'PosTrans2': trans.PosTrans2,
+        'NegTrans': trans.NegTrans,
     }
     DS = TripletDataset(
         root_dir=config.ROOT_PATH,
@@ -81,18 +73,9 @@ def main():
     train_loader = data.DataLoader(DS, batch_size=config.BATCH_SIZE, shuffle=True)
 
     test_trans = {
-        'OriTrans': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
-        'Trans1': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
-        'Trans2': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
+        'OriTrans': trans.OriTest,
+        'Trans1': trans.Trans1,
+        'Trans2': trans.Trans2,
     }
     DS_eval = TripletDataset(
         root_dir=config.ROOT_PATH,
@@ -110,7 +93,7 @@ def main():
     Classifier_loss = torch.nn.BCEWithLogitsLoss()
     # optimizer
     optim = torch.optim.SGD(
-        params=net.parameters,
+        params=net.parameters(),
         lr=config.LR,
         momentum=config.MOMENTUM
     )

@@ -32,7 +32,7 @@ class Model(nn.Module):
         else:
             out1 = torch.cat([ori, pos2, neg], dim=0)
 
-        classTensor = torch.zeros(size=(N, x.shape[-1]*3))
+        classTensor = torch.zeros(size=(N, x.shape[-1]*3)).to(config.DEVICE)
         for i in range(N):
             if mask[i]:
                 classTensor[i] = torch.cat([ori[i], pos1[i], neg[i]], dim=-1)

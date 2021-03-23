@@ -13,6 +13,7 @@ import numpy as np
 
 
 import algorithm.config as config
+import algorithm.trans as trans
 
 
 class TripletDataset(data.Dataset):
@@ -82,22 +83,10 @@ def transform_invert(img_tensor, data_transform):
 
 def test():
     train_trans = {
-        'OriTrans': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
-        'PosTrans1': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
-        'PosTrans2': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
-        'NegTrans': transforms.Compose([
-            transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
-            transforms.ToTensor()
-        ]),
+        'OriTrans': trans.OriTrain,
+        'PosTrans1': trans.PosTrans1,
+        'PosTrans2': trans.PosTrans2,
+        'NegTrans': trans.NegTrans
     }
     DS = TripletDataset(
         root_dir=config.ROOT_PATH,
@@ -113,18 +102,19 @@ def test():
     )
     for i in range(2):
         for index, (OriImg, PosImg1, PosImg2, NegImg, mask) in enumerate(train_loader):
-            # plt.figure()
-            # plt.subplot(1, 4, 1)
-            # plt.imshow(transform_invert(OriImg[0], 'None'))
-            # plt.subplot(1, 4, 2)
-            # plt.imshow(transform_invert(PosImg1[0], 'None'))
-            # plt.subplot(1, 4, 3)
-            # plt.imshow(transform_invert(PosImg2[0], 'None'))
-            # plt.subplot(1, 4, 4)
-            # plt.imshow(transform_invert(NegImg[0], 'None'))
-            # plt.show()
-            print(mask)
-            # break
+            plt.figure()
+            plt.subplot(1, 4, 1)
+            plt.imshow(transform_invert(OriImg[0], 'None'))
+            plt.subplot(1, 4, 2)
+            plt.imshow(transform_invert(PosImg1[0], 'None'))
+            plt.subplot(1, 4, 3)
+            plt.imshow(transform_invert(PosImg2[0], 'None'))
+            plt.subplot(1, 4, 4)
+            plt.imshow(transform_invert(NegImg[0], 'None'))
+            plt.show()
+            # print(type(mask[0]))
+            # print(mask.shape)
+            break
 
 
 if __name__ == '__main__':

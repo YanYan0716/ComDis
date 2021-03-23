@@ -1,10 +1,10 @@
 import torch
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 # dataset
-# ROOT_PATH = 'F:\\PROJECT\\ComDis\\algorithm\\data'
-# TRAIN_PATH = 'F:\\PROJECT\\ComDis\\algorithm\\data\\train.csv'
-ROOT_PATH = ''
-TRAIN_PATH = '/content/cifar/train.csv'
+ROOT_PATH = 'F:\\PROJECT\\ComDis\\algorithm\\data'
+TRAIN_PATH = 'F:\\PROJECT\\ComDis\\algorithm\\data\\train.csv'
+# ROOT_PATH = ''
+# TRAIN_PATH = '/content/cifar/train.csv'
 IMG_SIZE = 256
 CROP_SIZE = 224
 BATCH_SIZE = 2
