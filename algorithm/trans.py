@@ -23,8 +23,8 @@ OriTrain = transforms.Compose([
     ]),
     transforms.RandomCrop(size=config.CROP_SIZE),
     transforms.ToTensor(),
-    transforms.RandomApply([transforms.RandomErasing()], p=0.2)
-    # transforms.Normalize(norm_mean, norm_std)
+    transforms.RandomApply([transforms.RandomErasing()], p=0.2),
+    transforms.Normalize(norm_mean, norm_std)
 ])
 
 PosTrans1 = transforms.Compose([
@@ -41,8 +41,8 @@ PosTrans1 = transforms.Compose([
     ]),
     transforms.RandomCrop(size=config.CROP_SIZE),
     transforms.ToTensor(),
-    transforms.RandomApply([transforms.RandomErasing()], p=0.2)
-    # transforms.Normalize(norm_mean, norm_std)
+    transforms.RandomApply([transforms.RandomErasing()], p=0.2),
+    transforms.Normalize(norm_mean, norm_std)
 ])
 
 PosTrans2 = transforms.Compose([
@@ -59,8 +59,8 @@ PosTrans2 = transforms.Compose([
     ]),
     transforms.RandomCrop(size=config.CROP_SIZE),
     transforms.ToTensor(),
-    transforms.RandomApply([transforms.RandomErasing()], p=0.2)
-    # transforms.Normalize(norm_mean, norm_std)
+    transforms.RandomApply([transforms.RandomErasing()], p=0.2),
+    transforms.Normalize(norm_mean, norm_std)
 ])
 
 NegTrans = transforms.Compose([
@@ -77,8 +77,8 @@ NegTrans = transforms.Compose([
     ]),
     transforms.RandomCrop(size=config.CROP_SIZE),
     transforms.ToTensor(),
-    transforms.RandomApply([transforms.RandomErasing()], p=0.2)
-    # transforms.Normalize(norm_mean, norm_std)
+    transforms.RandomApply([transforms.RandomErasing()], p=0.2),
+    transforms.Normalize(norm_mean, norm_std)
 ])
 
 # test
@@ -102,8 +102,8 @@ Trans1 = transforms.Compose([
     ]),
     transforms.Resize(size=config.CROP_SIZE),
     transforms.ToTensor(),
-    transforms.RandomApply([transforms.RandomErasing()], p=0.2)
-    # transforms.Normalize(norm_mean, norm_std)
+    transforms.RandomApply([transforms.RandomErasing()], p=0.2),
+    transforms.Normalize(norm_mean, norm_std)
 ])
 
 Trans2 = transforms.Compose([
@@ -120,6 +120,6 @@ Trans2 = transforms.Compose([
     ]),
     transforms.Resize(size=config.CROP_SIZE),
     transforms.ToTensor(),
-    transforms.RandomApply([transforms.RandomErasing()], p=0.2)
-    # transforms.Normalize(norm_mean, norm_std)
+    transforms.RandomApply([transforms.RandomErasing()], p=0.2),
+    transforms.Normalize(norm_mean, norm_std)
 ])

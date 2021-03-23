@@ -17,7 +17,14 @@ class Model(nn.Module):
         except:
             raise ValueError('please check config.BACKBONE_ARCH ')
         self.model.fc = nn.Linear(self.model.fc.in_features, fts_dim)
-        self.classifier = nn.Linear(fts_dim*3, 1)
+        self.classifier = nn.Sequential(
+            nn.Linear(fts_dim * 3, fts_dim*2),
+            nn.ReLU(inplace=True),
+            nn.Linear(fts_dim*2, fts_dim),
+            nn.ReLU(inplace=True),
+            nn.Linear(fts_dim, 1)
+        )
+
 
     def forward(self, x, mask):
         N = int(x.shape[0] / 4)
