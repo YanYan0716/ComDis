@@ -20,6 +20,8 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
     for epoch in range(config.TOTAL_EPOCH):
         model.train()
         avgLoss = 0
+        tLoss = 0
+        cLoss = 0
         for idx, (anchor, pos1, pos2, neg, mask) in enumerate(dataLoader):
             anchor, pos1, pos2, neg = anchor.to(config.DEVICE), pos1.to(config.DEVICE), pos2.to(config.DEVICE), neg.to(config.DEVICE)
             mask = mask.to(config.DEVICE)
@@ -36,13 +38,20 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
             loss2 = Classifier_loss(out2.sequeeze(dim=-1), mask)
             loss = loss1+loss2
             avgLoss += loss
+            tLoss += loss1
+            cLoss += loss2
             loss.backward()
             optim.step()
 
             if idx % config.LOG_BATCHSIZE == 0:
                 avgLoss = avgLoss / config.LOG_BATCHSIZE*anchorFts.size(0)
-                print(f'[epoch:%3d/' % (epoch) + 'EPOCH: %3d]:' % config.TOTAL_EPOCH + ' [LOSS: %.4f]' % avgLoss)
+                tLoss = tLoss / config.LOG_BATCHSIZE*anchorFts.size(0)
+                cLoss = cLoss / config.LOG_BATCHSIZE*anchorFts.size(0)
+                print(f'[epoch:%3d/' % (epoch) + 'EPOCH: %3d]:' % config.TOTAL_EPOCH + '\tbatchSize: %3d' % idx
+                      + '\t[LOSS: %.4f]' % avgLoss + '[Trip Loss: %.4f' % tLoss + '\tClass Loss: %.4f]' % cLoss)
                 avgLoss = 0
+                tLoss = 0
+                cLoss = 0
         lrSche.step()
         if epoch % config.EVAL == 0:
             acc = evalution(testDS, model)
@@ -53,6 +62,8 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
                     'model': model.state_dict()
                 }
                 save_checkpoint(state=state, savepath=config.SAVE_PATH)
+                print(f'saving model to {config.SAVE_PATH} ..........................')
+            print(f'eval ...\t [acc: %.4f' % acc + '/ BAcc: %.4f]' % BAcc)
 
 
 def main():
@@ -112,6 +123,7 @@ def main():
         lrSche=cosWarmUp,
         testDS=test_loader,
     )
+
 
 if __name__ == '__main__':
     main()

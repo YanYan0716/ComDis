@@ -7,7 +7,7 @@ TRAIN_PATH = 'F:\\PROJECT\\ComDis\\algorithm\\data\\train.csv'
 # TRAIN_PATH = '/content/cifar/train.csv'
 IMG_SIZE = 256
 CROP_SIZE = 224
-BATCH_SIZE = 2
+BATCH_SIZE = 64
 
 # model
 BACKBONE_ARCH = 'resnet18'
