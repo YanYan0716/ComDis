@@ -21,8 +21,10 @@ class TripletDataset(data.Dataset):
         self.RootDir = root_dir
         self.transform = transform
         self.train = train
-
-        self.ImgList = pd.read_csv(img_dir)['img_name']
+        if self.train:
+            self.ImgList = pd.read_csv(img_dir)['name']
+        else:
+            self.ImgList = pd.read_csv(img_dir)['img_name']
         self.ImgsLen = self.__len__()
 
     def __getitem__(self, index):
