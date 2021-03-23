@@ -19,7 +19,7 @@ CONTINUE = False
 ALPHA = 0.1
 
 # optimizer
-WARMUP_EPOCH = 50
+WARMUP_EPOCH = 0
 LR = 0.001
 MOMENTUM = 0.9
 

@@ -92,7 +92,7 @@ def main():
     DS_eval = TripletDataset(
         root_dir=config.ROOT_PATH,
         transform=test_trans,
-        img_dir=config.TRAIN_PATH,
+        img_dir=config.TEST_PATH,
         train=False
     )
 
