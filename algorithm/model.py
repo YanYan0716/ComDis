@@ -1,6 +1,7 @@
 import sys
 sys.path.append('/content/ComDis')
 sys.path.append('./')
+sys.path.append('./ComDis')
 import torchvision.models as models
 from torch import nn
 import torch

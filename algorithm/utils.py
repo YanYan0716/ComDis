@@ -1,6 +1,7 @@
 import sys
 sys.path.append('/content/ComDis')
 sys.path.append('./')
+sys.path.append('./ComDis')
 from torch.optim.lr_scheduler import LambdaLR
 import math
 import torch

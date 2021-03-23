@@ -1,6 +1,7 @@
 import sys
 sys.path.append('/content/ComDis')
 sys.path.append('./')
+sys.path.append('./ComDis')
 import os
 from torch.utils import data
 from torchvision import transforms
