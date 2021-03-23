@@ -53,12 +53,12 @@ class TripletDataset(data.Dataset):
             OriImg_ = Image.open(OriPath).convert('RGB')
             OriImg = self.transform['OriTrans'](OriImg_)
             Img1 = self.transform['Trans1'](OriImg_)
-            if random.randint(0, 1):
+            if random.randint(0, 1):  # mask=1表示是同一类，[ori, pos1, pos2]
                 mask = 1
                 Img2 = self.transform['Trans2'](OriImg_)
                 return OriImg, Img1, Img2, mask
             else:
-                mask = 0
+                mask = 0  # mask=0表示是不同类，[ori, pos1, neg]
                 NegImg_ = Image.open(NegPath).convert('RGB')
                 Img2 = self.transform['Trans2'](NegImg_)
                 return OriImg, Img1, Img2, mask

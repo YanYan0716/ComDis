@@ -42,10 +42,10 @@ class Model(nn.Module):
 
         classTensor = torch.zeros(size=(N, x.shape[-1]*3)).to(config.DEVICE)
         for i in range(N):
-            if mask[i]:
-                classTensor[i] = torch.cat([ori[i], pos1[i], neg[i]], dim=-1)
-            else:
+            if mask[i]:  # mask=1表示是同一类，[ori, pos1, pos2]
                 classTensor[i] = torch.cat([ori[i], pos1[i], pos2[i]], dim=-1)
+            else:  # mask=0表示是不同类，[ori, pos1, neg]
+                classTensor[i] = torch.cat([ori[i], pos1[i], neg[i]], dim=-1)
         out2 = self.classifier(classTensor)
         return out1, out2
 
