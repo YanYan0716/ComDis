@@ -16,7 +16,8 @@ BACKBONE_ARCH = 'resnet18'
 PRETRAIN_BACKARCH = True
 FTS_DIM = 256
 CONTINUE = False
-ALPHA = 0.1
+ALPHA = 5
+BETAL = 1
 
 # optimizer
 WARMUP_EPOCH = 0

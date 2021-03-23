@@ -16,7 +16,7 @@ import algorithm.trans as trans
 
 
 def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testDS=None):
-    print('training ...')
+    print(f'training ... alpha: {config.ALPHA}, betal: {config.BETAL}, lr: {config.LR}')
     BAcc = 0
     for epoch in range(config.TOTAL_EPOCH):
         model.train()
@@ -33,10 +33,10 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
             anchorFts = out1[ :config.BATCH_SIZE]
             posFts = out1[config.BATCH_SIZE : config.BATCH_SIZE*2]
             negFts = out1[-config.BATCH_SIZE: ]
-            loss1 = Triplet_loss(anchorFts, posFts, negFts)
+            loss1 = Triplet_loss(anchorFts, posFts, negFts) * config.ALPHA
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
-            loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.ALPHA
+            loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
             loss = loss1+loss2
             avgLoss += loss
             tLoss += loss1
@@ -45,9 +45,9 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
             optim.step()
 
             if idx % config.LOG_BATCHSIZE == 0:
-                avgLoss = avgLoss / config.LOG_BATCHSIZE*anchorFts.size(0)
-                tLoss = tLoss / config.LOG_BATCHSIZE*anchorFts.size(0)
-                cLoss = cLoss / config.LOG_BATCHSIZE*anchorFts.size(0)
+                avgLoss = avgLoss / config.LOG_BATCHSIZE
+                tLoss = tLoss / config.LOG_BATCHSIZE
+                cLoss = cLoss / config.LOG_BATCHSIZE
                 print(f'[epoch:%3d/' % (epoch) + 'EPOCH: %3d]' % config.TOTAL_EPOCH + '%4d:' % idx
                       + ' [LOSS: %.4f]' % avgLoss + '[Trip Loss: %.4f' % tLoss + '/ Class Loss: %.4f]' % cLoss)
                 avgLoss = 0
