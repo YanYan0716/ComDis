@@ -96,7 +96,7 @@ def main():
         train=False
     )
 
-    test_loader = data.DataLoader(DS_eval, batch_size=config.BATCH_SIZE, shuffle=True)
+    test_loader = data.DataLoader(DS_eval, batch_size=config.BATCH_SIZE, shuffle=True, drop_last=True)
 
     # model
     net = Model(fts_dim=config.FTS_DIM).to(config.DEVICE)
@@ -104,8 +104,13 @@ def main():
     Triplet_loss = torch.nn.TripletMarginLoss(margin=0.8, p=2)
     Classifier_loss = torch.nn.BCEWithLogitsLoss()
     # optimizer
+    cls_params = list(map(id, net.classifier.parameters()))
+    base_params = filter(lambda p: id(p) not in cls_params, net.parameters())
     optim = torch.optim.SGD(
-        params=net.parameters(),
+        params=[
+            {'params': base_params},
+            {'params': net.classifier.parameters(), 'lr': config.LR*10}
+        ],
         lr=config.LR,
         momentum=config.MOMENTUM
     )
