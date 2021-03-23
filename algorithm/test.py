@@ -24,7 +24,8 @@ def evalution(dataLoader, model):
                 out1[-config.BATCH_SIZE:]
             ], dim=-1)
         output = model.classifier(fts)
-        output = torch.sigmoid(output)
-        correct_number += torch.sum(output)
+        output = torch.sigmoid(output).ge(0.5).type(torch.float32)
+        result = output.eq(mask).type(torch.float32)
+        correct_number += torch.sum(result)
     acc = correct_number / total_number
     return acc

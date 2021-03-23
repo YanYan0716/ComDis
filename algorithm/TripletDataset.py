@@ -44,7 +44,7 @@ class TripletDataset(data.Dataset):
             mask = random.randint(0, 1)
             return OriImg, PosImg1, PosImg2, NegImg, mask
         else:
-            assert self.transform is not None, 'please set transform for training ...'
+            assert self.transform is not None, 'please set transform for testing ...'
             OriImg_ = Image.open(OriPath).convert('RGB')
             OriImg = self.transform['OriTrans'](OriImg_)
             Img1 = self.transform['Trans1'](OriImg_)
