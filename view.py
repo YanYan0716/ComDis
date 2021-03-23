@@ -4,7 +4,9 @@ from werkzeug.utils import secure_filename
 from flask_bootstrap import Bootstrap
 
 from flask import Flask
-
+'''
+https://www.pianshen.com/article/3951322566/
+'''
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
 bootstrap = Bootstrap(app)
