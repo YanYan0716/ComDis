@@ -18,6 +18,7 @@ def evalution(dataLoader, model):
             config.DEVICE)
         imgs = torch.cat([anchor, img1, img2], dim=0)
         out1 = model.model(imgs)
+        out1 = model.flatten(out1)
 
         fts = torch.cat(
             [

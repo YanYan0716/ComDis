@@ -15,7 +15,7 @@ from algorithm.test import evalution
 import algorithm.trans as trans
 
 
-def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testDS=None):
+def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss,  lrSche, testDS=None):
     print(f'train  alpha: {config.ALPHA}, betal: {config.BETAL}, lr: {config.LR}')
     BAcc = 0
     for epoch in range(config.TOTAL_EPOCH):
@@ -23,13 +23,15 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
         avgLoss = 0
         tLoss = 0
         cLoss = 0
-        for idx, (anchor, pos1, pos2, neg, mask) in enumerate(dataLoader):
+        c2Loss = 0
+        for idx, (anchor, pos1, pos2, neg, mask, label) in enumerate(dataLoader):
             anchor, pos1, pos2, neg = anchor.to(config.DEVICE), pos1.to(config.DEVICE), pos2.to(config.DEVICE), neg.to(config.DEVICE)
-            mask = mask.to(config.DEVICE)
+            mask, label = mask.to(config.DEVICE), label.to(config.DEVICE)
             imgs = torch.cat([anchor, pos1, pos2, neg], dim=0)
 
             optim.zero_grad()
-            out1, out2 = model(imgs, mask)
+            out1, out2, ou3 = model(imgs, mask)
+
             anchorFts = out1[ :config.BATCH_SIZE]
             posFts = out1[config.BATCH_SIZE : config.BATCH_SIZE*2]
             negFts = out1[-config.BATCH_SIZE: ]
@@ -37,10 +39,13 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
             loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
-            loss = loss1+loss2
+            loss3 = class2_loss(ou3, label)*config.GAMMA
+            loss = loss1+loss2+loss3
+
             avgLoss += loss
             tLoss += loss1
             cLoss += loss2
+            c2Loss += loss3
             loss.backward()
             optim.step()
 
@@ -48,11 +53,14 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, lrSche, testD
                 avgLoss = avgLoss / config.LOG_BATCHSIZE
                 tLoss = tLoss / config.LOG_BATCHSIZE
                 cLoss = cLoss / config.LOG_BATCHSIZE
+                c2Loss = c2Loss / config.LOG_BATCHSIZE
                 print(f'[epoch:%3d/' % (epoch) + 'EPOCH: %3d]' % config.TOTAL_EPOCH + '%4d:' % idx
-                      + ' [LOSS: %.4f]' % avgLoss + '[Trip Loss: %.4f' % tLoss + '/ Class Loss: %.4f]' % cLoss)
+                      + ' [LOSS: %.4f]' % avgLoss + '[Trip Loss: %.4f' % tLoss + '/ Class Loss: %.4f]' % cLoss
+                      + ' / c2lass Loss: %.4f]' % c2Loss)
                 avgLoss = 0
                 tLoss = 0
                 cLoss = 0
+                c2Loss = 0
         lrSche.step()
         if epoch % config.EVAL == 0:
             acc, corr_num, total_num = evalution(testDS, model)
@@ -104,6 +112,7 @@ def main():
     # loss
     Triplet_loss = torch.nn.TripletMarginLoss(margin=0.8, p=2)
     Classifier_loss = torch.nn.BCEWithLogitsLoss()
+    class2_loss = torch.nn.CrossEntropyLoss()
     # optimizer
     cls_params = list(map(id, net.classifier.parameters()))
     base_params = filter(lambda p: id(p) not in cls_params, net.parameters())
@@ -126,6 +135,7 @@ def main():
         model=net,
         Triplet_loss=Triplet_loss,
         Classifier_loss=Classifier_loss,
+        class2_loss=class2_loss,
         optim=optim,
         lrSche=cosWarmUp,
         testDS=test_loader,
