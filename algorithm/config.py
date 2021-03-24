@@ -6,7 +6,7 @@ DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 # ROOT_PATH = ''  # google
 # TRAIN_PATH = '/content/cifar/train.csv'
 ROOT_PATH = './CUB_200_2011/images'  # kaggle
-TRAIN_PATH = './CUB_200_2011/train.csv'
+TRAIN_PATH = 'train.csv'
 IMG_SIZE = 256
 CROP_SIZE = 224
 BATCH_SIZE = 64
@@ -33,5 +33,5 @@ EVAL = 1
 SAVE_PATH = './weights'
 # eval
 # TEST_PATH = '/content/cifar/test.csv'  # google
-TEST_PATH = './CUB_200_2011/train.csv'
+TEST_PATH = './test.csv'
 BEST_PATH = 'F:\\PROJECT\\ComDis\\weights\\best.pth.tar'
