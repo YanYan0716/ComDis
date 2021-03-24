@@ -28,7 +28,10 @@ def save_checkpoint(state, savepath):
         os.mkdir(savepath)
     save_dir = os.path.join(savepath, 'best.pth.tar')
     try:
-        torch.save(state, save_dir)
+        if int(torch.__version__.strip('.')[2]) > 4:
+            torch.save(state, save_dir, _use_new_zipfile_serialization=False)
+        else:
+            torch.save(state, save_dir)
     except:
         print('save failed !!!, please check again !!!')
 

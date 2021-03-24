@@ -51,8 +51,7 @@ def process():
             flash('upload successfull', 'success')
             """*************加入神经网络进行判断**********************************"""
             net = Model(fts_dim=config.FTS_DIM)
-            weights_path = 'F:\\PROJECT\\ComDis\\weights\\best.pth.tar'
-            checkpoint = torch.load(weights_path, map_location='cpu')
+            checkpoint = torch.load(config.BEST_PATH, map_location='cpu')
             net.load_state_dict(checkpoint['model'])
             net.eval()
             ### eval
