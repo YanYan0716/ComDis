@@ -54,6 +54,7 @@ def process():
             weights_path = 'F:\\PROJECT\\ComDis\\weights\\best.pth.tar'
             checkpoint = torch.load(weights_path, map_location='cpu')
             net.load_state_dict(checkpoint['model'])
+            net.eval()
             ### eval
             firstImg, firstImg_, secondImg = imageTrans(uploadpaths[0], uploadpaths[1])
             imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
