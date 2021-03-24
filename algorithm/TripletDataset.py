@@ -27,7 +27,9 @@ class TripletDataset(data.Dataset):
             self.ImgList = info_file['name']
             self.LabelList = info_file['label']
         else:
-            self.ImgList = pd.read_csv(img_dir)['file_name']
+            info_file = pd.read_csv(img_dir)
+            self.ImgList = info_file['file_name']
+            self.LabelList = info_file['label']
         self.ImgsLen = self.__len__()
 
     def __getitem__(self, index):
@@ -52,6 +54,7 @@ class TripletDataset(data.Dataset):
             mask = random.randint(0, 1)
             return OriImg, PosImg1, PosImg2, NegImg, mask, OriLabel
         else:
+            OriLabel = self.LabelList[index]
             assert self.transform is not None, 'please set transform for testing ...'
             OriImg_ = Image.open(OriPath).convert('RGB')
             OriImg = self.transform['OriTrans'](OriImg_)
@@ -59,12 +62,12 @@ class TripletDataset(data.Dataset):
             if random.randint(0, 1):  # mask=1表示是同一类，[ori, pos1, pos2]
                 mask = 1
                 Img2 = self.transform['Trans2'](OriImg_)
-                return OriImg, Img1, Img2, mask
+                return OriImg, Img1, Img2, mask, OriLabel
             else:
                 mask = 0  # mask=0表示是不同类，[ori, pos1, neg]
                 NegImg_ = Image.open(NegPath).convert('RGB')
                 Img2 = self.transform['Trans2'](NegImg_)
-                return OriImg, Img1, Img2, mask
+                return OriImg, Img1, Img2, mask, OriLabel
 
     def __len__(self):
         return len(self.ImgList)
