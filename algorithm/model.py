@@ -27,7 +27,6 @@ class Model(nn.Module):
             nn.Linear(fts_dim, 1)
         )
 
-
     def forward(self, x, mask):
         N = int(x.shape[0] / 4)
         x = self.model(x)
