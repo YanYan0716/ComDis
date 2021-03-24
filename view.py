@@ -58,12 +58,15 @@ def process():
             firstImg, firstImg_, secondImg = imageTrans(uploadpaths[0], uploadpaths[1])
             imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
             out1 = net.model(imgs)
+            out1 = net.flatten(out1)
             fts = torch.cat([out1[:1], out1[1:2], out1[-1:]], dim=-1)
             output = net.classifier(fts)
-            output = torch.sigmoid(output).ge(0.5).type(torch.float32).squeeze(dim=-1)
-            output = str(output.numpy())
+            output_ = torch.sigmoid(output).ge(0.5).type(torch.float32).squeeze(dim=-1)
+            output_ = str(output_.numpy())
+            out0 = str(torch.sigmoid(output).squeeze(dim=-1).detach().numpy())
+            ooo=[output_, out0]
             # return render_template('base.html', imglist=imgfile)
-            return Response(output)
+            return Response(str(ooo))
         else:
             flash('no File Selected', 'danger')
     return render_template('base.html')

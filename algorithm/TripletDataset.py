@@ -23,13 +23,13 @@ class TripletDataset(data.Dataset):
         self.transform = transform
         self.train = train
         if self.train:
-            info_file = pd.read_csv(img_dir)
-            self.ImgList = info_file['name']
-            self.LabelList = info_file['label']
+            info_file = pd.read_csv(os.path.join(self.RootDir, img_dir))
+            self.ImgList = info_file['img_name']
+            self.LabelList = info_file['class_id']
         else:
-            info_file = pd.read_csv(img_dir)
-            self.ImgList = info_file['file_name']
-            self.LabelList = info_file['label']
+            info_file = pd.read_csv(os.path.join(self.RootDir, img_dir))
+            self.ImgList = info_file['img_name']
+            self.LabelList = info_file['class_id']
         self.ImgsLen = self.__len__()
 
     def __getitem__(self, index):
