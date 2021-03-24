@@ -5,6 +5,7 @@ sys.path.append('./ComDis')
 import torch
 
 import algorithm.config as config
+from algorithm.model import Model
 
 
 def evalution(dataLoader, model):
@@ -30,3 +31,11 @@ def evalution(dataLoader, model):
         correct_number += torch.sum(result)
     acc = correct_number / total_number * 100
     return acc, correct_number, total_number
+
+
+if __name__ == '__main__':
+    net = Model(fts_dim=config.FTS_DIM)
+    weights_path = 'F:\\PROJECT\\ComDis\\weights\\best.pth.tar'
+    checkpoint = torch.load(weights_path, map_location='cpu')
+    print(checkpoint.keys())
+    net.load_state_dict(checkpoint['model'])
