@@ -1,43 +1,21 @@
-{% extends "bootstrap/base.html" %}
-{% block title %}Flask-Upload{% endblock %}
- 
-{% block content %}
-<div class="container">
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    {% if category in ["success","danger"] %}
-    <div class="alert alert-{{ category }}">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-        {{ message }}
-    </div>
-    {% endif %}
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>hello world</title>
+</head>
+<body>
     <form method="post" enctype="multipart/form-data">
-        <input id="lefile" type="file" style="display:none" name="selectfile">
-        <div class="input-append form-inline">
-            <input id="photoCover" class="input-large form-control" type="text"
-                   style="height:34px;width:60vw;border:2px #337ab7 solid"
-                   placeholder="请选择影像">
-            <a class="btn btn-primary" onclick="$('input[id=lefile]').click();">浏览</a>
-            <button type="submit" class="btn btn-primary">上传</button>
-        </div>
-
+        <input type="file" name="selectfile" multiple="multiple" id="lefile">
+        <button type="submit">上传</button>
+        <button type="submit", onclick="", name="dianji">点击</button>
     </form>
-    {% if imagename %}
-    <img src="{{ url_for('static',filename='uploads/'+imagename) }}" width="300px" height="300px"/>
-    {% endif %}
-</div>
-{% endblock %}
-{% block scripts %}
-{{ super() }}
-<script type="text/javascript">
-    $('input[id=lefile]').change(function () {
-        $('#photoCover').val($(this).val());
-    });
 
-    $("#photoCover").attr('autocomplete', 'off')
-</script>
-{% endblock %}
+
+    {% if imglist %}
+        {% for imgname in imglist %}
+            <img src="{{ url_for('static',filename=imgname) }}" width="300px" height="300px"/>
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
