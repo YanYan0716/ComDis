@@ -16,7 +16,7 @@ import algorithm.trans as trans
 
 
 def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss,  lrSche, testDS=None):
-    print(f'train  alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}')
+    print(f'train  alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
     BAcc = 0
     for epoch in range(config.TOTAL_EPOCH):
         model.train()
