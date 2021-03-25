@@ -24,11 +24,11 @@ class TripletDataset(data.Dataset):
         self.transform = transform
         self.train = train
         if self.train:
-            info_file = pd.read_csv(os.path.join(self.RootDir, img_dir))
+            info_file = pd.read_csv(img_dir)
             self.ImgList = info_file['name']
             self.LabelList = info_file['label']
         else:
-            info_file = pd.read_csv(os.path.join(self.RootDir, img_dir))
+            info_file = pd.read_csv(img_dir)
             self.ImgList = info_file['file_name']
             self.LabelList = info_file['label']
         self.ImgsLen = self.__len__()
