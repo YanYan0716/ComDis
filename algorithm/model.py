@@ -79,3 +79,4 @@ def test():
 if __name__ == '__main__':
     test()
     a=models.resnet18()
+    nn.Conv2d()

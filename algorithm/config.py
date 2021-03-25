@@ -9,7 +9,7 @@ ROOT_PATH = ''  # kaggle
 TRAIN_PATH = '../input/cifar10/cifar/train.csv'
 IMG_SIZE = 256
 CROP_SIZE = 224
-BATCH_SIZE = 64
+BATCH_SIZE = 2
 
 # model
 BACKBONE_ARCH = 'resnet18'
@@ -19,7 +19,7 @@ CONTINUE = False
 ALPHA = 2
 BETAL = 1
 GAMMA = 1
-CLASSES_NUM = 10
+CLASSES_NUM = 200
 
 # optimizer
 WARMUP_EPOCH = 0

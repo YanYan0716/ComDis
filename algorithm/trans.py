@@ -101,7 +101,7 @@ Trans1 = transforms.Compose([
         ]),
         transforms.RandomAffine(degrees=10, translate=(0.01, 0.1), scale=(0.9, 1.1)),
     ]),
-    transforms.Resize(size=config.CROP_SIZE),
+    transforms.RandomCrop(size=config.CROP_SIZE),
     transforms.ToTensor(),
     transforms.RandomApply([transforms.RandomErasing()], p=0.2),
     transforms.Normalize(norm_mean, norm_std)
@@ -119,7 +119,7 @@ Trans2 = transforms.Compose([
         ]),
         transforms.RandomAffine(degrees=10, translate=(0.01, 0.1), scale=(0.9, 1.1)),
     ]),
-    transforms.Resize(size=config.CROP_SIZE),
+    transforms.RandomCrop(size=config.CROP_SIZE),
     transforms.ToTensor(),
     transforms.RandomApply([transforms.RandomErasing()], p=0.2),
     transforms.Normalize(norm_mean, norm_std)

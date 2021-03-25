@@ -108,7 +108,7 @@ def test():
         batch_size=config.BATCH_SIZE,
         shuffle=True
     )
-    for i in range(2):
+    for i in range(1):
         for index, (OriImg, PosImg1, PosImg2, NegImg, mask, label) in enumerate(train_loader):
             # plt.figure()
             # plt.subplot(1, 4, 1)
@@ -122,7 +122,7 @@ def test():
             # plt.show()
             print(label)
             # print(mask.shape)
-            break
+            # break
 
 
 if __name__ == '__main__':
