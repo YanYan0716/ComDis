@@ -36,5 +36,5 @@ SAVE_PATH = './weights'
 # eval
 # TEST_PATH = '/content/cifar/test.csv'  # google
 # TEST_PATH = '../input/cifar10/cifar/test.csv'
-TEST_PARH = '../input/cub-200-2011/CUB_200_2011/train.csv'
+TEST_PATH = '../input/cub-200-2011/CUB_200_2011/test.csv'
 BEST_PATH = 'F:\\PROJECT\\ComDis\\weights\\best.pth.tar'
