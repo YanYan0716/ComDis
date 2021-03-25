@@ -19,6 +19,7 @@ class Model(nn.Module):
             self.model = nn.Sequential(*list(base.children())[:-1])
         except:
             raise ValueError('please check config.BACKBONE_ARCH ')
+        self.conv = nn.Conv2d(in_channels=4, out_channels=3, kernel_size=1, stride=1)
         self.flatten = nn.Flatten()
         self.triplet = nn.Linear(512, fts_dim)
         self.classifier = nn.Sequential(
@@ -37,6 +38,7 @@ class Model(nn.Module):
     def forward(self, x, mask):
         N = int(x.shape[0] / 4)
         # 提特征
+        x = self.conv(x)
         x = self.model(x)
         x = self.flatten(x)
         ori = x[0:N]
@@ -63,7 +65,7 @@ class Model(nn.Module):
 
 
 def test():
-    x = torch.randn((2, 3, 224, 224))
+    x = torch.randn((2, 4, 224, 224))
     x = torch.cat([x, x, x, x], dim=0)
     print(x.shape)
     M = Model(fts_dim=config.FTS_DIM)
@@ -78,5 +80,5 @@ def test():
 
 if __name__ == '__main__':
     test()
-    a=models.resnet18()
-    nn.Conv2d()
+    # a=models.resnet18()
+    # nn.Conv2d()

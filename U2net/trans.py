@@ -127,13 +127,15 @@ def preprocess(imgdir):
         transforms.Normalize(mean=(0.485, 0.456, 0.406), std=(0.229, 0.224, 0.225))
     ])
     img = imgTrans(image)
+    # print(img.shape)
     return img
     # print(len(image.shape))
 
 
 if __name__ == '__main__':
-    img = preprocess('54.jpg')
+    img = preprocess('5.jpg')
     normalize = transforms.Compose([transforms.Normalize(mean = (0.485, 0.456, 0.406), std = (0.229, 0.224, 0.225))])
-    print(img.unsqueeze(dim=0).shape)
-    plt.imshow(transform_invert(img, normalize))
-    plt.show()
+    # print(img.unsqueeze(dim=0).shape)
+    # print(img.shape)
+    # plt.imshow(transform_invert(img, normalize))
+    # plt.show()
