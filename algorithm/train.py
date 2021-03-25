@@ -26,6 +26,11 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
         c2Loss = 0
         for idx, (anchor, pos1, pos2, neg, mask, label) in enumerate(dataLoader):
             anchor, pos1, pos2, neg = anchor.to(config.DEVICE), pos1.to(config.DEVICE), pos2.to(config.DEVICE), neg.to(config.DEVICE)
+            anchor = anchor[:, :3, :, :] * anchor[:, -1:, :, :]
+            pos1 = pos1[:, :3, :, :] * pos1[:, -1:, :, :]
+            pos2 = pos2[:, :3, :, :] * pos2[:, -1:, :, :]
+            neg = neg[:, :3, :, :] * neg[:, -1:, :, :]
+
             mask, label = mask.to(config.DEVICE), label.to(config.DEVICE)
             imgs = torch.cat([anchor, pos1, pos2, neg], dim=0)
 

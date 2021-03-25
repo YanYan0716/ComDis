@@ -38,7 +38,7 @@ class Model(nn.Module):
     def forward(self, x, mask):
         N = int(x.shape[0] / 4)
         # 提特征
-        x = self.conv(x)
+        # x = self.conv(x)
         x = self.model(x)
         x = self.flatten(x)
         ori = x[0:N]
