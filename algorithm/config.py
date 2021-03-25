@@ -10,7 +10,7 @@ TRAIN_PATH = '../input/cifar10/cifar/train.csv'
 IMG_SIZE = 256
 CROP_SIZE = 224
 BATCH_SIZE = 64
-U2WEITHS_DIR = './U2net/weights/u2netp.pth'
+U2WEITHS_DIR = '../U2net/weights/u2netp.pth'
 
 # model
 BACKBONE_ARCH = 'resnet18'
