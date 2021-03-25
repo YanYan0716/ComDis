@@ -35,14 +35,14 @@ class TripletDataset(data.Dataset):
     def __getitem__(self, index):
         # earn images' path
         NegIndex = random.randint(0, self.ImgsLen-1)
-        while index == NegIndex:
+        OriLabel = self.LabelList[index]
+        while (index == NegIndex) or (OriLabel != self.LabelList[NegIndex]):
             NegIndex = random.randint(0, self.ImgsLen - 1)
         OriPath = os.path.join(self.RootDir, self.ImgList[index])
         NegPath = os.path.join(self.RootDir, self.ImgList[NegIndex])
 
         # img augment
         if self.train is True:
-            OriLabel = self.LabelList[index]
             assert self.transform is not None, 'please set transform for training ...'
             OriImg_ = Image.open(OriPath).convert('RGB')
             OriImg = self.transform['OriTrans'](OriImg_)
@@ -54,7 +54,6 @@ class TripletDataset(data.Dataset):
             mask = random.randint(0, 1)
             return OriImg, PosImg1, PosImg2, NegImg, mask, OriLabel
         else:
-            OriLabel = self.LabelList[index]
             assert self.transform is not None, 'please set transform for testing ...'
             OriImg_ = Image.open(OriPath).convert('RGB')
             OriImg = self.transform['OriTrans'](OriImg_)
