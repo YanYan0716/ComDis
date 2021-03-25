@@ -76,16 +76,27 @@ class TripletDataset(data.Dataset):
         else:
             assert self.transform is not None, 'please set transform for testing ...'
             OriImg_ = Image.open(OriPath).convert('RGB')
+
             OriImg = self.transform['OriTrans'](OriImg_)
+            OriImgMask = self.genImgMask(OriImg)
+            OriImg = torch.cat([OriImg, OriImgMask], dim=0)
+
             Img1 = self.transform['Trans1'](OriImg_)
+            Img1Mask = self.genImgMask(Img1)
+            Img1 = torch.cat([Img1, Img1Mask], dim=0)
+
             if random.randint(0, 1):  # mask=1表示是同一类，[ori, pos1, pos2]
                 mask = 1
                 Img2 = self.transform['Trans2'](OriImg_)
+                Img2Mask = self.genImgMask(Img2)
+                Img2 = torch.cat([Img2, Img2Mask], dim=0)
                 return OriImg, Img1, Img2, mask, OriLabel
             else:
                 mask = 0  # mask=0表示是不同类，[ori, pos1, neg]
                 NegImg_ = Image.open(NegPath).convert('RGB')
                 Img2 = self.transform['Trans2'](NegImg_)
+                Img2Mask = self.genImgMask(Img2)
+                Img2 = torch.cat([Img2, Img2Mask], dim=0)
                 return OriImg, Img1, Img2, mask, OriLabel
 
     def __len__(self):
