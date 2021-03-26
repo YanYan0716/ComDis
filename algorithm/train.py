@@ -73,19 +73,19 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
         }
         save_checkpoint(state=state, savepath=config.SAVE_PATH)
 
-        if epoch % config.EVAL == 0:
-            acc, acc2, correct_number1, correct_number2, total_number = evalution(testDS, model)
-            if BAcc < acc:
-                BAcc = acc
-                state = {
-                    'epoch': epoch,
-                    'model': model.state_dict()
-                }
-                save_checkpoint(state=state, savepath=config.SAVE_PATH)
-                print(f'saving model to {config.SAVE_PATH} ..........................')
-            print(f'eval \t [acc: %.2f' % acc + '/ BAcc: %.4f]' % BAcc
-                  + '[corr_num: %5d' % correct_number1 + '/ total num: %6d]' % total_number
-                  + '[class acc: %.2f' % acc2 + 'corr_num: %5d]' % correct_number2)
+        # if epoch % config.EVAL == 0:
+        #     acc, acc2, correct_number1, correct_number2, total_number = evalution(testDS, model)
+        #     if BAcc < acc:
+        #         BAcc = acc
+        #         state = {
+        #             'epoch': epoch,
+        #             'model': model.state_dict()
+        #         }
+        #         save_checkpoint(state=state, savepath=config.SAVE_PATH)
+        #         print(f'saving model to {config.SAVE_PATH} ..........................')
+        #     print(f'eval \t [acc: %.2f' % acc + '/ BAcc: %.4f]' % BAcc
+        #           + '[corr_num: %5d' % correct_number1 + '/ total num: %6d]' % total_number
+        #           + '[class acc: %.2f' % acc2 + 'corr_num: %5d]' % correct_number2)
 
 
 def main():
