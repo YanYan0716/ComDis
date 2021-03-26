@@ -54,21 +54,26 @@ class TripletDataset(data.Dataset):
 
             OriImg = self.transform['OriTrans'](OriImg_)
             # 添加原图的mask
-            OriImgMask = self.genImgMask(OriImg)
-            OriImg = torch.cat([OriImg, OriImgMask], dim=0)
+            if random.randint(0, 1):
+                OriImgMask = self.genImgMask(OriImg)
+                # OriImg = torch.cat([OriImg, OriImgMask], dim=0)
+                OriImg = OriImg * OriImgMask
 
             PosImg1 = self.transform['PosTrans1'](OriImg_)
-            Pos1Mask = self.genImgMask(PosImg1)
-            PosImg1 = torch.cat([PosImg1, Pos1Mask], dim=0)
+            if random.randint(0, 1):
+                Pos1Mask = self.genImgMask(PosImg1)
+                PosImg1 = PosImg1 * Pos1Mask
 
             PosImg2 = self.transform['PosTrans2'](OriImg_)
-            Pos2Mask = self.genImgMask(PosImg2)
-            PosImg2 = torch.cat([PosImg2, Pos2Mask], dim=0)
+            if random.randint(0, 1):
+                Pos2Mask = self.genImgMask(PosImg2)
+                PosImg2 = PosImg2 * Pos2Mask
 
             NegImg_ = Image.open(NegPath).convert('RGB')
             NegImg =self.transform['NegTrans'](NegImg_)
-            NegMask = self.genImgMask(NegImg)
-            NegImg = torch.cat([NegImg, NegMask], dim=0)
+            if random.randint(0, 1):
+                NegMask = self.genImgMask(NegImg)
+                NegImg = NegImg* NegMask
 
             # mask
             mask = random.randint(0, 1)
