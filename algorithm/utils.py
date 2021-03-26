@@ -49,7 +49,7 @@ def testCos_warmup():
     )
     lr_list, epoch_list = list(), list()
 
-    for epoch in range(config.TOTAL_EPOCH):
+    for epoch in range(0, config.TOTAL_EPOCH):
         lr_list.append(cosWarmUp.get_lr())
         epoch_list.append(epoch)
         for i in range(10):
@@ -58,11 +58,11 @@ def testCos_warmup():
             optimizer.step()
             optimizer.zero_grad()
         cosWarmUp.step()
-    # plt.plot(epoch_list, lr_list, label='step LR Scheduler')
-    # plt.xlabel('epoch')
-    # plt.ylabel('Learning rate')
-    # plt.legend()
-    # plt.show()
+    plt.plot(epoch_list, lr_list, label='step LR Scheduler')
+    plt.xlabel('epoch')
+    plt.ylabel('Learning rate')
+    plt.legend()
+    plt.show()
 
 
 if __name__ == '__main__':

@@ -18,7 +18,7 @@ import algorithm.trans as trans
 def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss,  lrSche, testDS=None):
     print(f'train  alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
     BAcc = 0
-    for epoch in range(config.TOTAL_EPOCH):
+    for epoch in range(config.SAVE_PATH, config.TOTAL_EPOCH):
         model.train()
         avgLoss = 0
         tLoss = 0
@@ -115,6 +115,10 @@ def main():
 
     # model
     net = Model(fts_dim=config.FTS_DIM).to(config.DEVICE)
+    if config.CONTINUE:
+        print('continue train ...')
+        checkpoint = torch.load(config.BEST_PATH, map_location=config.DEVICE)
+        net.load_state_dict(checkpoint['model'])
     # loss
     Triplet_loss = torch.nn.TripletMarginLoss(margin=0.8, p=2)
     Classifier_loss = torch.nn.BCEWithLogitsLoss()

@@ -17,7 +17,6 @@ U2WEITHS_DIR = './ComDis/U2net/weights/u2netp.pth'
 BACKBONE_ARCH = 'resnet18'
 PRETRAIN_BACKARCH = True
 FTS_DIM = 256
-CONTINUE = False
 ALPHA = 2
 BETAL = 1
 GAMMA = 1
@@ -30,9 +29,14 @@ MOMENTUM = 0.9
 
 # training
 TOTAL_EPOCH = 300
+START_EPOCH = 1
 LOG_BATCHSIZE = 20
 EVAL = 1
 SAVE_PATH = './weights'
+CONTINUE = True
+CONTINUE_PATH = '../input/bestwy/best.pth.tar'
+
+
 # eval
 # TEST_PATH = '/content/cifar/test.csv'  # google
 # TEST_PATH = '../input/cifar10/cifar/test.csv'
