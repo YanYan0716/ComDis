@@ -25,7 +25,7 @@ class TripletDataset(data.Dataset):
         self.train = train
         if self.train:
             info_file = pd.read_csv(img_dir)
-            self.ImgList = info_file['file_name']
+            self.ImgList = info_file['name']
             self.LabelList = info_file['label']
         else:
             info_file = pd.read_csv(img_dir)
@@ -54,24 +54,24 @@ class TripletDataset(data.Dataset):
 
             OriImg = self.transform['OriTrans'](OriImg_)
             # 添加原图的mask
-            if random.randint(0, 1):
+            if random.random() > 0.8:
                 OriImgMask = self.genImgMask(OriImg)
                 # OriImg = torch.cat([OriImg, OriImgMask], dim=0)
                 OriImg = OriImg * OriImgMask
 
             PosImg1 = self.transform['PosTrans1'](OriImg_)
-            if random.randint(0, 1):
+            if random.random() > 0.8:
                 Pos1Mask = self.genImgMask(PosImg1)
                 PosImg1 = PosImg1 * Pos1Mask
 
             PosImg2 = self.transform['PosTrans2'](OriImg_)
-            if random.randint(0, 1):
+            if random.random() > 0.8:
                 Pos2Mask = self.genImgMask(PosImg2)
                 PosImg2 = PosImg2 * Pos2Mask
 
             NegImg_ = Image.open(NegPath).convert('RGB')
             NegImg =self.transform['NegTrans'](NegImg_)
-            if random.randint(0, 1):
+            if random.random() > 0.8:
                 NegMask = self.genImgMask(NegImg)
                 NegImg = NegImg* NegMask
 
@@ -166,25 +166,25 @@ def test():
     for i in range(1):
         for index, (OriImg, PosImg1, PosImg2, NegImg, mask, label) in enumerate(train_loader):
             print(OriImg.shape, PosImg1.shape, PosImg2.shape, NegImg.shape)
-            # plt.figure()
-            # plt.subplot(2, 4, 1)
-            # plt.imshow(transform_invert(OriImg[0][:3], trans.OriTrain))
+            plt.figure()
+            plt.subplot(2, 4, 1)
+            plt.imshow(transform_invert(OriImg[0][:3], trans.OriTrain))
             # plt.subplot(2, 4, 2)
             # plt.imshow(transform_invert(OriImg[0][-1:], 'None'))
-            # plt.subplot(2, 4, 3)
-            # plt.imshow(transform_invert(PosImg1[0][:3], trans.PosTrans1))
+            plt.subplot(2, 4, 3)
+            plt.imshow(transform_invert(PosImg1[0][:3], trans.PosTrans1))
             # plt.subplot(2, 4, 4)
             # plt.imshow(transform_invert(PosImg1[0][-1:], 'None'))
-            # plt.subplot(2, 4, 5)
-            # plt.imshow(transform_invert(PosImg2[0][:3], trans.PosTrans2))
+            plt.subplot(2, 4, 5)
+            plt.imshow(transform_invert(PosImg2[0][:3], trans.PosTrans2))
             # plt.subplot(2, 4, 6)
             # plt.imshow(transform_invert(PosImg2[0][-1:], 'None'))
-            # plt.subplot(2, 4, 7)
-            # plt.imshow(transform_invert(NegImg[0][:3], trans.NegTrans))
+            plt.subplot(2, 4, 7)
+            plt.imshow(transform_invert(NegImg[0][:3], trans.NegTrans))
             # plt.subplot(2, 4, 8)
             # plt.imshow(transform_invert(NegImg[0][-1:], 'None'))
-            img = OriImg[:, :3, :, :]*OriImg[:, -1:, :, :]
-            plt.imshow(transform_invert(img[0], trans.OriTrain))
+            # img = OriImg[:, :3, :, :]*OriImg[:, -1:, :, :]
+            # plt.imshow(transform_invert(OriImg[0], trans.OriTrain))
             plt.show()
             # print(label)
             # print(mask.shape)
