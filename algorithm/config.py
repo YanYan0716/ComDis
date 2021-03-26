@@ -30,11 +30,11 @@ MOMENTUM = 0.9
 
 # training
 TOTAL_EPOCH = 300
-START_EPOCH = 1
+START_EPOCH = 0
 LOG_BATCHSIZE = 20
 EVAL = 100
 SAVE_PATH = './weights'
-CONTINUE = True
+CONTINUE = False
 CONTINUE_PATH = '../input/bestwy/best.pth.tar'
 
 
