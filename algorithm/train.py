@@ -67,6 +67,12 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
                 cLoss = 0
                 c2Loss = 0
         lrSche.step()
+        state = {
+            'epoch': epoch,
+            'model': model.state_dict()
+        }
+        save_checkpoint(state=state, savepath=config.SAVE_PATH)
+
         if epoch % config.EVAL == 0:
             acc, acc2, correct_number1, correct_number2, total_number = evalution(testDS, model)
             if BAcc < acc:
