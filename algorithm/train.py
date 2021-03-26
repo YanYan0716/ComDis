@@ -35,7 +35,7 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
             imgs = torch.cat([anchor, pos1, pos2, neg], dim=0)
 
             optim.zero_grad()
-            out1, out2, ou3 = model(imgs, mask)
+            out1, out2, = model(imgs, mask)
 
             anchorFts = out1[ :config.BATCH_SIZE]
             posFts = out1[config.BATCH_SIZE : config.BATCH_SIZE*2]
@@ -44,13 +44,13 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
             loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
-            loss3 = class2_loss(ou3, label)*config.GAMMA
-            loss = loss1+loss2+loss3
+            # loss3 = class2_loss(ou3, label)*config.GAMMA
+            loss = loss1+loss2  #+loss3
 
             avgLoss += loss
             tLoss += loss1
             cLoss += loss2
-            c2Loss += loss3
+            # c2Loss += loss3
             loss.backward()
             optim.step()
 
@@ -124,12 +124,12 @@ def main():
     Classifier_loss = torch.nn.BCEWithLogitsLoss()
     class2_loss = torch.nn.CrossEntropyLoss()
     # optimizer
-    cls_params = list(map(id, net.classifier.parameters()))
-    base_params = filter(lambda p: id(p) not in cls_params, net.parameters())
+    base_params = list(map(id, net.model.parameters()))
+    low_params = filter(lambda p: id(p) not in base_params, net.parameters())
     optim = torch.optim.SGD(
         params=[
-            {'params': base_params},
-            {'params': net.classifier.parameters(), 'lr': config.LR*10}
+            {'params': low_params},
+            {'params': net.model.parameters(), 'lr': config.LR*10}
         ],
         lr=config.LR,
         momentum=config.MOMENTUM

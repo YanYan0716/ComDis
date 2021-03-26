@@ -36,11 +36,11 @@ def evalution(dataLoader, model):
         result = output.eq(mask).type(torch.float32)
         correct_number1 += torch.sum(result)
 
-        output_ = model.class2(out1[:config.BATCH_SIZE])
-        pred = torch.max(output_.data, 1)
-        for i in range(len(lable)):
-            if pred[1][i] == lable[i]:
-                correct_number2 += 1
+        # output_ = model.class2(out1[:config.BATCH_SIZE])
+        # pred = torch.max(output_.data, 1)
+        # for i in range(len(lable)):
+        #     if pred[1][i] == lable[i]:
+        #         correct_number2 += 1
 
     acc1 = correct_number1 / total_number * 100
     acc2 = correct_number2 / total_number * 100
