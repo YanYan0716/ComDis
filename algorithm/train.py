@@ -117,7 +117,7 @@ def main():
     net = Model(fts_dim=config.FTS_DIM).to(config.DEVICE)
     if config.CONTINUE:
         print('continue train ...')
-        checkpoint = torch.load(config.BEST_PATH, map_location=config.DEVICE)
+        checkpoint = torch.load(config.CONTINUE_PATH, map_location=config.DEVICE)
         net.load_state_dict(checkpoint['model'])
     # loss
     Triplet_loss = torch.nn.TripletMarginLoss(margin=0.8, p=2)
