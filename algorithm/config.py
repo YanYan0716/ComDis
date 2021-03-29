@@ -1,8 +1,8 @@
 import torch
 DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
 # dataset
-# ROOT_PATH = 'F:\\PROJECT\\ComDis\\algorithm\\data'
-# TRAIN_PATH = 'F:\\PROJECT\\ComDis\\algorithm\\data\\train.csv'
+# ROOT_PATH = 'E:\\Algorithm\\ComDis\\algorithm\\data'
+# TRAIN_PATH = '.\\algorithm\\data\\train.csv'
 # ROOT_PATH = ''  # google
 # TRAIN_PATH = '/content/cifar/train.csv'
 ROOT_PATH = '../input/cub-200-2011/CUB_200_2011/images'  # kaggle
@@ -12,12 +12,12 @@ TRAIN_PATH = '../input/cub-200-2011/CUB_200_2011/train.csv'
 IMG_SIZE = 256
 CROP_SIZE = 224
 BATCH_SIZE = 64
-U2WEITHS_DIR = './U2net/weights/u2netp.pth'
+U2WEITHS_DIR = './ComDis/U2net/weights/u2netp.pth'
 
 # model
-BACKBONE_ARCH = 'resnet18'
+BACKBONE_ARCH = 'resnet50'
 PRETRAIN_BACKARCH = True
-FTS_DIM = 256
+FTS_DIM = 512
 ALPHA = 2
 BETAL = 1
 GAMMA = 1
@@ -40,6 +40,6 @@ CONTINUE_PATH = '../input/bestww/best.pth.tar'
 
 # eval
 # TEST_PATH = '/content/cifar/test.csv'  # google
-# TEST_PATH = '../input/cifar10/cifar/test.csv'
-TEST_PATH = '../input/cub-200-2011/CUB_200_2011/test.csv'
-BEST_PATH = 'F:\\PROJECT\\ComDis\\weights\\best.pth.tar'
+TEST_PATH = '.\\algorithm\\data\\train.csv'
+# TEST_PATH = '../input/cub-200-2011/CUB_200_2011/test.csv'
+BEST_PATH = 'E:\\Algorithm\\ComDis\\weights\\best.pth.tar'
