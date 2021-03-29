@@ -40,6 +40,6 @@ CONTINUE_PATH = '../input/bestww/best.pth.tar'
 
 # eval
 # TEST_PATH = '/content/cifar/test.csv'  # google
-TEST_PATH = '.\\algorithm\\data\\train.csv'
-# TEST_PATH = '../input/cub-200-2011/CUB_200_2011/test.csv'
+# TEST_PATH = '.\\algorithm\\data\\train.csv'
+TEST_PATH = '../input/cub-200-2011/CUB_200_2011/test.csv'
 BEST_PATH = 'E:\\Algorithm\\ComDis\\weights\\best.pth.tar'
