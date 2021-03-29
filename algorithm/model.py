@@ -19,7 +19,7 @@ class Model(nn.Module):
             self.model = nn.Sequential(*list(base.children())[:-1])
         except:
             raise ValueError('please check config.BACKBONE_ARCH ')
-        # self.conv = nn.Conv2d(in_channels=4, out_channels=3, kernel_size=1, stride=1)
+        self.conv = nn.Conv2d(in_channels=4, out_channels=3, kernel_size=1, stride=1)
         self.flatten = nn.Flatten()
         self.triplet = nn.Linear(512, fts_dim)
         self.classifier = nn.Sequential(
@@ -38,7 +38,7 @@ class Model(nn.Module):
     def forward(self, x, mask):
         N = int(x.shape[0] / 4)
         # 提特征
-        # x = self.conv(x)
+        x = self.conv(x)
         x = self.model(x)
         x = self.flatten(x)
         # triplet
