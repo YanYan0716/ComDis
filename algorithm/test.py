@@ -35,6 +35,7 @@ def evalution(dataLoader, model):
                 out1[config.BATCH_SIZE: config.BATCH_SIZE * 2],
                 out1[-config.BATCH_SIZE:]
             ], dim=-1)
+        print(fts.shape)
         output = model.classifier(fts)
         output = torch.sigmoid(output).ge(0.5).type(torch.float32).squeeze(dim=-1)
         result = output.eq(mask).type(torch.float32)
