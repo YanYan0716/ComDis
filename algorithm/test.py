@@ -17,6 +17,8 @@ def evalution(dataLoader, model):
         total_number += anchor.shape[0]
         anchor, img1, img2, mask, lable = anchor.to(config.DEVICE), img1.to(config.DEVICE), img2.to(config.DEVICE), mask.to(
             config.DEVICE), lable.to(config.DEVICE)
+        print('***********************************')
+        print(anchor.shape)
         # anchor = anchor[:, :3, :, :] * anchor[:, -1:, :, :]
         # img1 = img1[:, :3, :, :] * img1[:, -1:, :, :]
         # img2 = img2[:, :3, :, :] * img2[:, -1:, :, :]
