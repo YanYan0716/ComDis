@@ -52,19 +52,19 @@ def genImgMask(imgTensor):
 def imageTrans(img1, img2):
     img1 = Image.open(img1).convert('RGB')
     firstImg = OriTest(img1)
-    # Img1Mask = genImgMask(firstImg)
+    Img1Mask = genImgMask(firstImg)
     # firstImg = torch.cat([firstImg, Img1Mask], dim=0).unsqueeze(dim=0)
-    # firstImg = firstImg * Img1Mask
+    firstImg = firstImg * Img1Mask
 
     firstImg_ = Trans1(img1)
     # Img1Mask_ = genImgMask(firstImg_)
     # firstImg_ = torch.cat([firstImg_, Img1Mask_], dim=0).unsqueeze(dim=0)
-    # firstImg_ = firstImg_ * Img1Mask
+    firstImg_ = firstImg_ * Img1Mask
 
     img2 = Image.open(img2).convert('RGB')
     secodeImg = OriTest(img2)
-    # Img2Mask = genImgMask(secodeImg)
-    # secodeImg = secodeImg * Img2Mask
+    Img2Mask = genImgMask(secodeImg)
+    secodeImg = secodeImg * Img2Mask
 
     firstImg = firstImg.unsqueeze(dim=0)
     firstImg_ = firstImg_.unsqueeze(dim=0)
