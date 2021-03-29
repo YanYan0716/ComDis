@@ -53,19 +53,21 @@ def imageTrans(img1, img2):
     img1 = Image.open(img1).convert('RGB')
     firstImg = OriTest(img1)
     Img1Mask = genImgMask(firstImg)
-    firstImg = torch.cat([firstImg, Img1Mask], dim=0).unsqueeze(dim=0)
-    firstImg_ = Trans1(img1)
-    Img1Mask_ = genImgMask(firstImg_)
-    firstImg_ = torch.cat([firstImg_, Img1Mask_], dim=0).unsqueeze(dim=0)
+    # firstImg = torch.cat([firstImg, Img1Mask], dim=0).unsqueeze(dim=0)
+    firstImg = firstImg * Img1Mask
+
+    firstImg_ = Trans1(firstImg)
+    # Img1Mask_ = genImgMask(firstImg_)
+    # firstImg_ = torch.cat([firstImg_, Img1Mask_], dim=0).unsqueeze(dim=0)
 
     img2 = Image.open(img2).convert('RGB')
     secodeImg = OriTest(img2)
     Img2Mask = genImgMask(secodeImg)
-    secodeImg = torch.cat([secodeImg, Img2Mask], dim=0).unsqueeze(dim=0)
+    secodeImg = secodeImg * Img2Mask
 
-    # firstImg = OriTest(img1).unsqueeze(dim=0)
-    # firstImg_ = Trans1(img1).unsqueeze(dim=0)
-    # secodeImg = OriTest(img2).unsqueeze(dim=0)
+    firstImg = firstImg.unsqueeze(dim=0)
+    firstImg_ = firstImg_.unsqueeze(dim=0)
+    secodeImg = secodeImg.unsqueeze(dim=0)
     return firstImg, firstImg_, secodeImg
 
 
@@ -99,9 +101,9 @@ def process():
             ### eval
             firstImg, firstImg_, secondImg = imageTrans(uploadpaths[0], uploadpaths[1])
 
-            firstImg = firstImg[:, :3, :, :] * firstImg[:, -1:, :, :]
-            firstImg_ = firstImg_[:, :3, :, :] * firstImg_[:, -1:, :, :]
-            secondImg = secondImg[:, :3, :, :] * secondImg[:, -1:, :, :]
+            # firstImg = firstImg[:, :3, :, :] * firstImg[:, -1:, :, :]
+            # firstImg_ = firstImg_[:, :3, :, :] * firstImg_[:, -1:, :, :]
+            # secondImg = secondImg[:, :3, :, :] * secondImg[:, -1:, :, :]
 
             plt.figure()
             plt.subplot(1, 4, 1)
@@ -115,9 +117,10 @@ def process():
             imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
             out1 = net.model(imgs)
             out1 = net.flatten(out1)
+            out1 = net.triplet(out1)
             fts = torch.cat([out1[:1], out1[1:2], out1[-1:]], dim=-1)
             output = net.classifier(fts)
-            output_ = torch.sigmoid(output).ge(0.5).type(torch.float32).squeeze(dim=-1)
+            output_ = torch.sigmoid(output).ge(0.49).type(torch.float32).squeeze(dim=-1)
             output_ = str(output_.numpy())
             out0 = str(torch.sigmoid(output).squeeze(dim=-1).detach().numpy())
             ooo=[output_, out0]
