@@ -136,7 +136,7 @@ def main():
     optim = torch.optim.SGD(
         params=[
             {'params': low_params},
-            {'params': net.model.parameters(), 'lr': config.LR*2}
+            {'params': net.model.parameters(), 'lr': config.LR*1}
         ],
         lr=config.LR,
         momentum=config.MOMENTUM
