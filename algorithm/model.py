@@ -66,7 +66,7 @@ class Model(nn.Module):
 
 
 def test():
-    x = torch.randn((2, 3, 224, 224))
+    x = torch.randn((2, 4, 224, 224))
     x = torch.cat([x, x, x, x], dim=0)
     print(x.shape)
     M = Model(fts_dim=config.FTS_DIM)

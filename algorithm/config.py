@@ -15,7 +15,7 @@ BATCH_SIZE = 32
 U2WEITHS_DIR = './ComDis/U2net/weights/u2netp.pth'
 
 # model
-BACKBONE_ARCH = 'resnet50'
+BACKBONE_ARCH = 'resnet34'
 PRETRAIN_BACKARCH = True
 FTS_DIM = 512
 ALPHA = 2
