@@ -19,6 +19,8 @@ def evalution(dataLoader, model):
             config.DEVICE), lable.to(config.DEVICE)
         print('***********************************')
         print(anchor.shape)
+        print(img1.shape)
+        print(img2.shape)
         # anchor = anchor[:, :3, :, :] * anchor[:, -1:, :, :]
         # img1 = img1[:, :3, :, :] * img1[:, -1:, :, :]
         # img2 = img2[:, :3, :, :] * img2[:, -1:, :, :]
