@@ -11,7 +11,7 @@ ROOT_PATH = '../input/cub-200-2011/CUB_200_2011/images'  # kaggle
 TRAIN_PATH = '../input/cub-200-2011/CUB_200_2011/train.csv'
 IMG_SIZE = 256
 CROP_SIZE = 224
-BATCH_SIZE = 64
+BATCH_SIZE = 32
 U2WEITHS_DIR = './ComDis/U2net/weights/u2netp.pth'
 
 # model
