@@ -51,51 +51,48 @@
 #     cv2.imshow('edged', imutils.resize(enhancerImg, height=500))
 #     cv2.waitKey(0)
 #     cv2.destroyAllWindows()
-import cv2 as cv
+import cv2
 import numpy as np
+img = cv2.pyrDown(cv2.imread("test.jpg", cv2.IMREAD_UNCHANGED))
+# threshold 函数对图像进行二化值处理，由于处理后图像对原图像有所变化，因此img.copy()生成新的图像，cv2.THRESH_BINARY是二化值
+ret, thresh = cv2.threshold(cv2.cvtColor(img.copy(), cv2.COLOR_BGR2GRAY), 127, 255, cv2.THRESH_BINARY)
+# findContours函数查找图像里的图形轮廓
+# 函数参数thresh是图像对象
+# 层次类型，参数cv2.RETR_EXTERNAL是获取最外层轮廓，cv2.RETR_TREE是获取轮廓的整体结构
+# 轮廓逼近方法
+# 输出的返回值，image是原图像、contours是图像的轮廓、hier是层次类型
+contours, hier = cv2.findContours(thresh, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
-# 读入图片
-src = cv.imread('test.jpg')
-# 转换成灰度图
-gray = cv.cvtColor(src, cv.COLOR_BGR2GRAY)
-# 二值化
-ret, thresh = cv.threshold(gray, 129, 255, cv.THRESH_BINARY)
+for c in contours:
+    # 轮廓绘制方法一
+    # boundingRect函数计算边框值，x，y是坐标值，w，h是矩形的宽和高
+    x, y, w, h = cv2.boundingRect(c)
+    # 在img图像画出矩形，(x, y), (x + w, y + h)是矩形坐标，(0, 255, 0)设置通道颜色，2是设置线条粗度
+    cv2.rectangle (img, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-# 查找轮廓
-# binary-二值化结果，contours-轮廓信息，hierarchy-层级
-contours, hierarchy = cv.findContours(thresh, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
-# 显示轮廓，tmp为黑色的背景图
-tmp = np.zeros(src.shape, np.uint8)
-res = cv.drawContours(tmp, contours, -1, (250, 255, 255), 1)
-cv.imshow('Allcontours', res)
-for c in contours[1:]:
-    x, y, w, h = cv.boundingRect(c)  # 外接矩形
-    cv.rectangle(res,(x,y),(x+w,y+h),(0,255,0),2)
-#
-# cnt = contours[8]
-# tmp2 = np.zeros(src.shape, np.uint8)
-# res2 = cv.drawContours(tmp2, cnt, -1, (250, 255, 255), 2)
-# cv.imshow('cnt', res2)
-#
-# # 轮廓特征
-# # 面积
-# print(cv.contourArea(cnt))
-# # 周长,第二个参数指定图形是否闭环,如果是则为True, 否则只是一条曲线.
-# print(cv.arcLength(cnt, True))
-#
-# # 轮廓近似，epsilon数值越小，越近似
-# epsilon = 0.08 * cv.arcLength(cnt, True)
-# approx = cv.approxPolyDP(cnt, epsilon, True)
-# tmp2 = np.zeros(src.shape, np.uint8)
-# # 注意，这里approx要加中括号
-# res3 = cv.drawContours(tmp2, [approx], -1, (250, 250, 255), 1)
-# cv.imshow('approx', res3)
-#
-# # 外接图形
-# x, y, w, h = cv.boundingRect(cnt)
-# # 直接在图片上进行绘制，所以一般要将原图复制一份，再进行绘制
-# tmp3 = src.copy()
-# res4 = cv.rectangle(tmp3, (x, y), (x + w, y + h), (0, 0, 255), 2)
-cv.imshow('rectangle', res)
+# 轮廓绘制方法二
+# 查找最小区域
+rect = cv2.minAreaRect(c)
+# 计算最小面积矩形的坐标
+box = cv2.boxPoints(rect)
+# 将坐标规范化为整数
+box = np.int0(box)
+# 绘制矩形
+cv2.drawContours(img, [box], 0, (0, 0, 255), 3)
 
-cv.waitKey()
+# 轮廓绘制方法三
+# 圆心坐标和半径的计算
+(x, y), radius = cv2.minEnclosingCircle(c)
+# 规范化为整数
+center = (int(x), int(y))
+radius = int(radius)
+# 勾画圆形区域
+img = cv2.circle (img, center, radius, (0, 255, 0), 2)
+
+# # 轮廓绘制方法四
+# 围绕图形勾画蓝色线条
+cv2.drawContours(img, contours, -1, (255, 0, 0), 2)
+# 显示图像
+cv2.imshow("contours", img)
+cv2.waitKey()
+cv2.destroyAllWindows()

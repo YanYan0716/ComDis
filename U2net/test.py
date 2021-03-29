@@ -15,7 +15,7 @@ from algorithm.config import DEVICE
 from U2net.trans import preprocess
 from algorithm.TripletDataset import transform_invert
 MODEL_DIR = './U2net/weights/u2netp.pth'
-IMG_DIR = '5.jpg'
+IMG_DIR = '189207.jpg'
 
 
 def normPRED(d):
@@ -31,35 +31,36 @@ def test():
     net.eval()
     img = preprocess(IMG_DIR)
     img = img.unsqueeze(dim=0).type(torch.FloatTensor)
-    img = torch.cat([img, img], dim=0)
+    # img = torch.cat([img, img], dim=0)
     # img = Variable(img)
     # d1, d2, d3, d4, d5, d6, d7 = net(img)
     d1 = net(img)
     print(d1.shape)
-    # pred = d1[:, 0, :, :]
-    # pred = normPRED(pred)
-    #
-    # predict = pred
-    # print('----------')
-    # print(predict.shape)
-    # res = transforms.Compose([
-    #     transforms.ToPILImage(),
-    #     transforms.Resize((224, 224)),
-    #     transforms.ToTensor(),
-    # ])
-    # predict = res(predict)
-    # print(predict.shape)
-    #
-    # predict = predict.squeeze()
-    # predict_np = predict.cpu().data.numpy()
-    # # print(type(predict_np[0][0]*255))
-    # im = Image.fromarray(predict_np*255).convert('L')
-    # # image = io.imread(IMG_DIR)
-    # # imo = im.resize((image.shape[1], image.shape[0]), resample=Image.BILINEAR)
-    # print(im.size)
-    #
-    # im.save('test.jpg')
-    # print('ok')
+    pred = d1[:, 0, :, :]
+    pred = normPRED(pred)
+
+    predict = pred
+    print('----------')
+    print(predict.shape)
+    res = transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+    ])
+    predict = res(predict)
+    print(predict.shape)
+
+    predict = predict.squeeze()
+    predict_np = predict.cpu().data.numpy()
+    # print(type(predict_np[0][0]*255))
+    # im = Image.fromarray(predict_np*255).convert('rgb')
+    im = Image.fromarray((predict_np*255).astype('uint8')).convert('RGB')
+    # image = io.imread(IMG_DIR)
+    # imo = im.resize((image.shape[1], image.shape[0]), resample=Image.BILINEAR)
+    print(im.size)
+
+    im.save('test.jpg')
+    print('ok')
 
 
 if __name__ == '__main__':
