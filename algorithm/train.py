@@ -45,13 +45,13 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
             loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
-            loss3 = class2_loss(out3, label)*config.GAMMA
-            loss = loss1+loss2+loss3
+            # loss3 = class2_loss(out3, label)*config.GAMMA
+            loss = loss1+loss2#+loss3
 
             avgLoss += loss
             tLoss += loss1
             cLoss += loss2
-            c2Loss += loss3
+            # c2Loss += loss3
             loss.backward()
             optim.step()
 
