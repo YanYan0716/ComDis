@@ -67,7 +67,7 @@ def testCos_warmup():
 
 
 def EarnName():
-    path = "./data"
+    path = "./test"
     original_images = []
     pict_name = open('name.txt', 'w+')
     for root, dirs, filenames in os.walk(path):
@@ -75,16 +75,16 @@ def EarnName():
             original_images.append(root + "/" + filename)
     original_images = sorted(original_images)
     print('num: {}'.format(len(original_images)))
-
     for filename in (original_images):
         filename = filename.replace('\\', '/')
-        print(filename)
+        # print(filename)
         pict_name.write(filename + '\n')
     pict_name.close()
 
 
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
+
 
 def Resize(imgPath):
     img = Image.open(imgPath).convert('RGB')
@@ -94,6 +94,7 @@ def Resize(imgPath):
 
 if __name__ == '__main__':
     # testCos_warmup()
+    # EarnName()
     img_path = open('name.txt', 'r').readlines()
     for i in range(len(img_path)):
         imgpath = img_path[i].split()[0]
@@ -102,5 +103,5 @@ if __name__ == '__main__':
         except:
             print(imgpath)
             break
-    Resize('./data/1642440.jpg')
+    # Resize('./data/1642440.jpg')
     print('ok')
