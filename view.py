@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import algorithm.config as config
 from algorithm.TripletDataset import transform_invert
 from algorithm.model import Model
-from algorithm.trans import OriTest, Trans1, normlize
+from algorithm.trans import OriTest, Trans1
 from U2net.U2model import U2NETP
 
 
@@ -44,7 +44,6 @@ def genImgMask(imgTensor):
         transforms.ToPILImage(),
         transforms.Resize((config.CROP_SIZE, config.CROP_SIZE)),
         transforms.ToTensor(),
-        # transforms.Normalize([0.5], [0.23])
     ])
     pred = resize_pred(pred)
     return pred
@@ -53,33 +52,20 @@ def genImgMask(imgTensor):
 def imageTrans(img1, img2):
     img1 = Image.open(img1).convert('RGB')
     firstImg = OriTest(img1)
-    # Img1Mask = genImgMask(firstImg)
-    # # firstImg = torch.cat([firstImg, Img1Mask], dim=0).unsqueeze(dim=0)
-    # for i in range(config.CROP_SIZE):
-    #     for j in range(config.CROP_SIZE):
-    #         if Img1Mask[:,i, j] == 0:
-    #             firstImg[:, i, j] = 1
-    firstImg = normlize(firstImg)
+    Img1Mask = genImgMask(firstImg)
+    # firstImg = torch.cat([firstImg, Img1Mask], dim=0).unsqueeze(dim=0)
+    firstImg = firstImg * Img1Mask
 
     firstImg_ = Trans1(img1)
-    # Img1Mask_ = genImgMask(firstImg_)
-    # # firstImg_ = torch.cat([firstImg_, Img1Mask_], dim=0).unsqueeze(dim=0)
-    # for i in range(config.CROP_SIZE):
-    #     for j in range(config.CROP_SIZE):
-    #         if Img1Mask_[:,i, j] == 0:
-    #             firstImg_[:, i, j] = 1
-    firstImg_ = normlize(firstImg_)
+    Img1Mask_ = genImgMask(firstImg_)
+    # firstImg_ = torch.cat([firstImg_, Img1Mask_], dim=0).unsqueeze(dim=0)
+    firstImg_ = firstImg_ * Img1Mask
 
     img2 = Image.open(img2).convert('RGB')
     secodeImg = OriTest(img2)
-    # Img2Mask = genImgMask(secodeImg)
-    # for i in range(config.CROP_SIZE):
-    #     for j in range(config.CROP_SIZE):
-    #         if Img2Mask[:,i, j] == 0:
-    #             secodeImg[:, i, j] = 1
-    secodeImg = normlize(secodeImg)
+    Img2Mask = genImgMask(secodeImg)
+    secodeImg = secodeImg * Img2Mask
 
-    # secodeImg = secodeImg * Img2Mask
     firstImg = firstImg.unsqueeze(dim=0)
     firstImg_ = firstImg_.unsqueeze(dim=0)
     secodeImg = secodeImg.unsqueeze(dim=0)
@@ -120,14 +106,14 @@ def process():
             # firstImg_ = firstImg_[:, :3, :, :] * firstImg_[:, -1:, :, :]
             # secondImg = secondImg[:, :3, :, :] * secondImg[:, -1:, :, :]
 
-            plt.figure()
-            plt.subplot(1, 4, 1)
-            plt.imshow(transform_invert(firstImg[0], normlize))
-            plt.subplot(1, 4, 2)
-            plt.imshow(transform_invert(firstImg_[0], normlize))
-            plt.subplot(1, 4, 3)
-            plt.imshow(transform_invert(secondImg[0], normlize))
-            plt.show()
+            # plt.figure()
+            # plt.subplot(1, 4, 1)
+            # plt.imshow(transform_invert(firstImg[0], OriTest))
+            # plt.subplot(1, 4, 2)
+            # plt.imshow(transform_invert(firstImg_[0], Trans1))
+            # plt.subplot(1, 4, 3)
+            # plt.imshow(transform_invert(secondImg[0], OriTest))
+            # plt.show()
 
             imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
             out1 = net.model(imgs)

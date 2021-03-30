@@ -15,7 +15,7 @@ from algorithm.config import DEVICE
 from U2net.trans import preprocess
 from algorithm.TripletDataset import transform_invert
 MODEL_DIR = './U2net/weights/u2netp.pth'
-IMG_DIR = '189207.jpg'
+IMG_DIR = '37922.jpg'
 
 
 def normPRED(d):
