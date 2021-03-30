@@ -23,7 +23,7 @@ def evalution(dataLoader, model):
 
         imgs = torch.cat([anchor, img1, img2], dim=0)
         # out1 = model.conv(imgs)
-        out1 = model.model(out1)
+        out1 = model.model(imgs)
         out1 = model.flatten(out1)
         out1 = model.triplet(out1)
 
