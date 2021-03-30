@@ -36,7 +36,7 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
             imgs = torch.cat([anchor, pos1, pos2, neg], dim=0)
 
             optim.zero_grad()
-            out1, out2, out3 = model(imgs, mask)
+            out1, out2, = model(imgs, mask)
 
             anchorFts = out1[ :config.BATCH_SIZE]
             posFts = out1[config.BATCH_SIZE : config.BATCH_SIZE*2]
