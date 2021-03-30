@@ -65,5 +65,28 @@ def testCos_warmup():
     plt.show()
 
 
+def EarnName():
+    path = "./data"
+    original_images = []
+    pict_name = open('name.txt', 'w+')
+    for root, dirs, filenames in os.walk(path):
+        for filename in filenames:
+            original_images.append(root + "/" + filename)
+    original_images = sorted(original_images)
+    print('num: {}'.format(len(original_images)))
+
+    for filename in (original_images):
+        filename = filename.replace('\\', '/')
+        #     label = label_dict[filename.split('/')[-2]]
+        print(filename)
+        pict_name.write(filename + '\n')
+    pict_name.close()
+
+
+def Resize(imgPath):
+    pass
+
+
 if __name__ == '__main__':
-    testCos_warmup()
+    # testCos_warmup()
+    EarnName()
