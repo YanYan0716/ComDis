@@ -17,11 +17,12 @@ class Model(nn.Module):
         try:
             base = getattr(models, config.BACKBONE_ARCH)(pretrained=config.PRETRAIN_BACKARCH)
             self.model = nn.Sequential(*list(base.children())[:-1])
+            self.base_output = base.fc.in_features
         except:
             raise ValueError('please check config.BACKBONE_ARCH ')
-        self.conv = nn.Conv2d(in_channels=4, out_channels=3, kernel_size=1, stride=1)
+        # self.conv = nn.Conv2d(in_channels=4, out_channels=3, kernel_size=1, stride=1)
         self.flatten = nn.Flatten()
-        self.triplet = nn.Linear(512, fts_dim)
+        self.triplet = nn.Linear(self.base_output, fts_dim)
         self.classifier = nn.Sequential(
             nn.Linear(fts_dim * 3, fts_dim*2),
             nn.ReLU(inplace=True),
@@ -38,7 +39,7 @@ class Model(nn.Module):
     def forward(self, x, mask):
         N = int(x.shape[0] / 4)
         # 提特征
-        x = self.conv(x)
+        # x = self.conv(x)
         x = self.model(x)
         x = self.flatten(x)
         # triplet
@@ -66,7 +67,7 @@ class Model(nn.Module):
 
 
 def test():
-    x = torch.randn((2, 4, 224, 224))
+    x = torch.randn((2, 3, 224, 224))
     x = torch.cat([x, x, x, x], dim=0)
     print(x.shape)
     M = Model(fts_dim=config.FTS_DIM)

@@ -59,7 +59,7 @@ def imageTrans(img1, img2):
     firstImg_ = Trans1(img1)
     Img1Mask_ = genImgMask(firstImg_)
     # firstImg_ = torch.cat([firstImg_, Img1Mask_], dim=0).unsqueeze(dim=0)
-    firstImg_ = firstImg_ * Img1Mask
+    firstImg_ = firstImg_ * Img1Mask_
 
     img2 = Image.open(img2).convert('RGB')
     secodeImg = OriTest(img2)
