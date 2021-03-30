@@ -11,7 +11,7 @@ TRAIN_PATH = '../input/cifar10/cifar/train.csv'
 # TRAIN_PATH = '../input/cub-200-2011/CUB_200_2011/train.csv'
 IMG_SIZE = 256
 CROP_SIZE = 224
-BATCH_SIZE = 32
+BATCH_SIZE = 64
 U2WEITHS_DIR = './U2net/weights/u2netp.pth'
 U2NET = False
 

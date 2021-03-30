@@ -30,11 +30,11 @@ class Model(nn.Module):
             nn.ReLU(inplace=True),
             nn.Linear(fts_dim, 1)
         )
-        # self.class2 = nn.Sequential(  # 辅助分类函数
-        #     nn.Linear(512, 256),
-        #     nn.ReLU(inplace=True),
-        #     nn.Linear(256, config.CLASSES_NUM)
-        # )
+        self.class2 = nn.Sequential(  # 辅助分类函数
+            nn.Linear(512, 256),
+            nn.ReLU(inplace=True),
+            nn.Linear(256, config.CLASSES_NUM)
+        )
 
     def forward(self, x, mask):
         N = int(x.shape[0] / 4)
@@ -62,8 +62,8 @@ class Model(nn.Module):
                 classTensor[i] = torch.cat([ori[i], pos1[i], neg[i]], dim=-1)
         out2 = self.classifier(classTensor)
         # 辅助分类
-        # out3 = self.class2(ori)
-        return out1, out2, #out3
+        out3 = self.class2(ori)
+        return out1, out2, out3
 
 
 def test():
