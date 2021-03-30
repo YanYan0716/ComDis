@@ -16,8 +16,8 @@ import algorithm.trans as trans
 
 
 def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss,  lrSche, testDS=None):
-    print(f'train  alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
-    acc, acc2, correct_number1, correct_number2, total_number = evalution(testDS, model)
+    print(f'train 。。。 alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
+    # acc, acc2, correct_number1, correct_number2, total_number = evalution(testDS, model)
     BAcc = 0
     for epoch in range(config.START_EPOCH, config.TOTAL_EPOCH):
         model.train()
@@ -45,8 +45,8 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
             loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
-            # loss3 = class2_loss(ou3, label)*config.GAMMA
-            loss = loss1+loss2  #+loss3
+            # loss3 = class2_loss(out3, label)*config.GAMMA
+            loss = loss1+loss2#+loss3
 
             avgLoss += loss
             tLoss += loss1

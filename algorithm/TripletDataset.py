@@ -35,8 +35,9 @@ class TripletDataset(data.Dataset):
 
         # 生成图像的显著mask
         self.U2net = U2NETP(3, 1)
-        self.U2net.load_state_dict(torch.load(config.U2WEITHS_DIR, map_location=config.DEVICE))
-        self.U2net.eval()
+        if config.U2NET:
+            self.U2net.load_state_dict(torch.load(config.U2WEITHS_DIR, map_location=config.DEVICE))
+            self.U2net.eval()
 
     def __getitem__(self, index):
         # earn images' path
@@ -54,8 +55,8 @@ class TripletDataset(data.Dataset):
 
             OriImg = self.transform['OriTrans'](OriImg_)
             # 添加原图的mask
-            OriImgMask = self.genImgMask(OriImg)
-            OriImg = torch.cat([OriImg, OriImgMask], dim=0)
+            # OriImgMask = self.genImgMask(OriImg)
+            # OriImg = torch.cat([OriImg, OriImgMask], dim=0)
 
             PosImg1 = self.transform['PosTrans1'](OriImg_)
             # Pos1Mask = self.genImgMask(PosImg1)

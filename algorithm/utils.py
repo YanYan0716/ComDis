@@ -7,6 +7,7 @@ import math
 import torch
 import os
 import matplotlib.pyplot as plt
+from PIL import Image
 
 
 import algorithm.config as config
@@ -65,5 +66,42 @@ def testCos_warmup():
     plt.show()
 
 
+def EarnName():
+    path = "./test"
+    original_images = []
+    pict_name = open('name.txt', 'w+')
+    for root, dirs, filenames in os.walk(path):
+        for filename in filenames:
+            original_images.append(root + "/" + filename)
+    original_images = sorted(original_images)
+    print('num: {}'.format(len(original_images)))
+    for filename in (original_images):
+        filename = filename.replace('\\', '/')
+        # print(filename)
+        pict_name.write(filename + '\n')
+    pict_name.close()
+
+
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+
+def Resize(imgPath):
+    img = Image.open(imgPath).convert('RGB')
+    img = img.resize((256, 256), resample=Image.BILINEAR)
+    img.save(imgPath)
+
+
 if __name__ == '__main__':
-    testCos_warmup()
+    # testCos_warmup()
+    # EarnName()
+    img_path = open('name.txt', 'r').readlines()
+    for i in range(len(img_path)):
+        imgpath = img_path[i].split()[0]
+        try:
+            Resize(imgpath)
+        except:
+            print(imgpath)
+            break
+    # Resize('./data/1642440.jpg')
+    print('ok')
