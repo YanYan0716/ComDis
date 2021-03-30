@@ -55,11 +55,11 @@ def test():
     # print(type(predict_np[0][0]*255))
     # im = Image.fromarray(predict_np*255).convert('rgb')
     im = Image.fromarray((predict_np*255).astype('uint8')).convert('RGB')
-    # image = io.imread(IMG_DIR)
-    # imo = im.resize((image.shape[1], image.shape[0]), resample=Image.BILINEAR)
-    print(im.size)
+    image = io.imread(IMG_DIR)
+    imo = im.resize((image.shape[1], image.shape[0]), resample=Image.BILINEAR)
+    print(imo.size)
 
-    im.save('test.jpg')
+    imo.save('test.jpg')
     print('ok')
 
 
