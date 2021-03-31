@@ -51,7 +51,7 @@ OriTest = transforms.Compose([
 ])
 
 Trans1 = transforms.Compose([
-    transforms.Resize((config.CROP_SIZE, config.CROP_SIZE)),
+    transforms.Resize((config.IMG_SIZE, config.IMG_SIZE)),
     # transforms.RandomCrop(size=config.CROP_SIZE),
     # AutoAugment(),
     transforms.RandomChoice([

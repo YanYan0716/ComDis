@@ -3,9 +3,13 @@ sys.path.append('/content/ComDis')
 sys.path.append('./')
 sys.path.append('./ComDis')
 import torch
+import matplotlib.pyplot as plt
 
 import algorithm.config as config
 from algorithm.model import Model
+from view import imageTrans, genImgMask
+from algorithm.trans import OriTest, Trans1, normlize
+from algorithm.TripletDataset import transform_invert
 
 
 def evalution(dataLoader, model):
@@ -52,5 +56,27 @@ def evalution(dataLoader, model):
 if __name__ == '__main__':
     net = Model(fts_dim=config.FTS_DIM)
     checkpoint = torch.load(config.BEST_PATH, map_location='cpu')
-    print(checkpoint.keys())
     net.load_state_dict(checkpoint['model'])
+    net.eval()
+
+    firstImg, firstImg_, secondImg = imageTrans('./test/465623.jpg', './test/465656.jpg')
+    plt.figure()
+    plt.subplot(1, 3, 1)
+    plt.imshow(transform_invert(firstImg[0], normlize))
+    plt.subplot(1, 3, 2)
+    plt.imshow(transform_invert(firstImg_[0], normlize))
+    plt.subplot(1, 3, 3)
+    plt.imshow(transform_invert(secondImg[0], normlize))
+    plt.show()
+
+    imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
+    with torch.no_grad():
+        out1 = net.model(imgs)
+        out1 = net.flatten(out1)
+        out1 = net.triplet(out1)
+        fts = torch.cat([out1[:1], out1[1:2], out1[-1:]], dim=-1)
+        output = net.classifier(fts)
+        output_ = torch.sigmoid(output).ge(0.51).type(torch.float32).squeeze(dim=-1)
+        output_ = str(output_.numpy())
+        out0 = str(torch.sigmoid(output).squeeze(dim=-1).detach().numpy())
+        print(out0)
