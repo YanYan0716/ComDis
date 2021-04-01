@@ -68,7 +68,7 @@ class Model(nn.Module):
 
 class Model2(nn.Module):
     def __init__(self, fts_dim=256):
-        super(Model, self).__init__()
+        super(Model2, self).__init__()
         try:
             base = getattr(models, config.BACKBONE_ARCH)(pretrained=config.PRETRAIN_BACKARCH)
             self.model = nn.Sequential(*list(base.children())[:-1])
