@@ -89,7 +89,7 @@ if __name__ == '__main__':
     net.load_state_dict(checkpoint['model'])
     net.eval()
 
-    firstImg, firstImg_, secondImg = imageTrans('./test/463827.jpg', './test/463862.jpg')
+    firstImg, firstImg_, secondImg = imageTrans('./test/461968.jpg', './test/462043.jpg')
     plt.figure()
     plt.subplot(1, 3, 1)
     plt.imshow(transform_invert(firstImg[0], normlize))
