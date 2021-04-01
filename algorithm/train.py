@@ -132,6 +132,7 @@ def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=
                 c2Loss = 0
         lrSche.step()
         epochLoss = epochLoss / idx
+        print(f'MinLoss: {MinLoss}, epochLoss: {epochLoss}')
         if MinLoss > epochLoss:
             MinLoss = epochLoss
             state = {
