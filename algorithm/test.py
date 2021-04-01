@@ -71,7 +71,7 @@ def evalution2(dataLoader, model):
         fts = torch.cat(
             [
                 out1[:config.BATCH_SIZE],
-                out1[config.BATCH_SIZE*2:config.BATCH_SIZE*3],
+                out1[config.BATCH_SIZE*1:config.BATCH_SIZE*2],
                 out1[-config.BATCH_SIZE:]
             ], dim=-1)
         output = model.classifier(fts)
