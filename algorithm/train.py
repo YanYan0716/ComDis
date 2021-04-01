@@ -20,8 +20,10 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
     print(f'train 。。。 alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
     # acc, acc2, correct_number1, correct_number2, total_number = evalution(testDS, model)
     BAcc = 0
+    MinLoss = 1000
     for epoch in range(config.START_EPOCH, config.TOTAL_EPOCH):
         model.train()
+        epochLoss = 0
         avgLoss = 0
         tLoss = 0
         cLoss = 0
@@ -45,13 +47,14 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
             loss1 = Triplet_loss(anchorFts, posFts, negFts) * config.ALPHA
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
-            loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
+            # loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
             # loss3 = class2_loss(out3, label)*config.GAMMA
-            loss = loss1+loss2#+loss3
+            loss = loss1# +loss2#+loss3
 
             avgLoss += loss
+            epochLoss += loss
             tLoss += loss1
-            cLoss += loss2
+            # cLoss += loss2
             # c2Loss += loss3
             loss.backward()
             optim.step()
@@ -69,25 +72,38 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
                 cLoss = 0
                 c2Loss = 0
         lrSche.step()
+        epochLoss = epochLoss / idx
+        if MinLoss > epochLoss:
+            MinLoss = epochLoss
+            state = {
+                'epoch': epoch,
+                'model': model.state_dict()
+            }
+            save_checkpoint(state=state, savepath=config.SAVE_PATH)
+            print(f'saving model to {config.SAVE_PATH} ..........................')
+
+
+
+
         # state = {
         #     'epoch': epoch,
         #     'model': model.state_dict()
         # }
         # save_checkpoint(state=state, savepath=config.SAVE_PATH)
 
-        if epoch % config.EVAL == 0:
-            acc, acc2, correct_number1, correct_number2, total_number = evalution(testDS, model)
-            if BAcc < acc:
-                BAcc = acc
-                state = {
-                    'epoch': epoch,
-                    'model': model.state_dict()
-                }
-                save_checkpoint(state=state, savepath=config.SAVE_PATH)
-                print(f'saving model to {config.SAVE_PATH} ..........................')
-            print(f'eval \t [acc: %.2f' % acc + '/ BAcc: %.4f]' % BAcc
-                  + '[corr_num: %5d' % correct_number1 + '/ total num: %6d]' % total_number
-                  + '[class acc: %.2f' % acc2 + 'corr_num: %5d]' % correct_number2)
+        # if epoch % config.EVAL == 0:
+        #     acc, acc2, correct_number1, correct_number2, total_number = evalution(testDS, model)
+        #     if BAcc < acc:
+        #         BAcc = acc
+        #         state = {
+        #             'epoch': epoch,
+        #             'model': model.state_dict()
+        #         }
+        #         save_checkpoint(state=state, savepath=config.SAVE_PATH)
+        #         print(f'saving model to {config.SAVE_PATH} ..........................')
+        #     print(f'eval \t [acc: %.2f' % acc + '/ BAcc: %.4f]' % BAcc
+        #           + '[corr_num: %5d' % correct_number1 + '/ total num: %6d]' % total_number
+        #           + '[class acc: %.2f' % acc2 + 'corr_num: %5d]' % correct_number2)
 
 
 def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=None):
