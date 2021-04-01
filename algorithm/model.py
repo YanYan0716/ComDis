@@ -99,7 +99,7 @@ class Model2(nn.Module):
         neg = out[-N:]
 
         # 二分类
-        classTensor = torch.zeros(size=(N, out.shape[-1]*2)).to(config.DEVICE)
+        classTensor = torch.zeros(size=(N, out.shape[-1]*3)).to(config.DEVICE)
         out1_2 = torch.zeros(size=(N, out.shape[-1])).to(config.DEVICE)
         for i in range(N):
             if mask[i]:  # mask=1表示不同类
