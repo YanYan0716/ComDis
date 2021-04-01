@@ -29,7 +29,7 @@ class TripletDataset(data.Dataset):
             self.LabelList = info_file['label']
         else:
             info_file = pd.read_csv(img_dir)
-            self.ImgList = info_file['name']
+            self.ImgList = info_file['file_name']
             self.LabelList = info_file['label']
         self.ImgsLen = self.__len__()
 
