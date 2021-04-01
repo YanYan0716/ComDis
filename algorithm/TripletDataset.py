@@ -25,7 +25,7 @@ class TripletDataset(data.Dataset):
         self.train = train
         if self.train:
             info_file = pd.read_csv(img_dir)
-            self.ImgList = info_file['name']
+            self.ImgList = info_file['file_name']
             self.LabelList = info_file['label']
         else:
             info_file = pd.read_csv(img_dir)
@@ -162,25 +162,25 @@ def test():
     for i in range(1):
         for index, (OriImg, PosImg1, PosImg2, NegImg, mask, label) in enumerate(train_loader):
             print(OriImg.shape, PosImg1.shape, PosImg2.shape, NegImg.shape)
-            plt.figure()
-            plt.subplot(2, 4, 1)
-            plt.imshow(transform_invert(OriImg[0][:3], trans.OriTrain))
-            plt.subplot(2, 4, 2)
-            plt.imshow(transform_invert(OriImg[0][-1:], 'None'))
-            plt.subplot(2, 4, 3)
-            plt.imshow(transform_invert(PosImg1[0][:3], trans.PosTrans1))
-            plt.subplot(2, 4, 4)
-            plt.imshow(transform_invert(PosImg1[0][-1:], 'None'))
-            plt.subplot(2, 4, 5)
-            plt.imshow(transform_invert(PosImg2[0][:3], trans.PosTrans2))
-            plt.subplot(2, 4, 6)
-            plt.imshow(transform_invert(PosImg2[0][-1:], 'None'))
-            plt.subplot(2, 4, 7)
-            plt.imshow(transform_invert(NegImg[0][:3], trans.NegTrans))
-            plt.subplot(2, 4, 8)
-            plt.imshow(transform_invert(NegImg[0][-1:], 'None'))
-            img = OriImg[:, :3, :, :]*OriImg[:, -1:, :, :]
-            # plt.imshow(transform_invert(img[0], trans.OriTrain))
+            # plt.figure()
+            # plt.subplot(2, 4, 1)
+            # plt.imshow(transform_invert(OriImg[0][:3], trans.OriTrain))
+            # plt.subplot(2, 4, 2)
+            # plt.imshow(transform_invert(OriImg[0][-1:], 'None'))
+            # plt.subplot(2, 4, 3)
+            # plt.imshow(transform_invert(PosImg1[0][:3], trans.PosTrans1))
+            # plt.subplot(2, 4, 4)
+            # plt.imshow(transform_invert(PosImg1[0][-1:], 'None'))
+            # plt.subplot(2, 4, 5)
+            # plt.imshow(transform_invert(PosImg2[0][:3], trans.PosTrans2))
+            # plt.subplot(2, 4, 6)
+            # plt.imshow(transform_invert(PosImg2[0][-1:], 'None'))
+            # plt.subplot(2, 4, 7)
+            # plt.imshow(transform_invert(NegImg[0][:3], trans.NegTrans))
+            # plt.subplot(2, 4, 8)
+            # plt.imshow(transform_invert(NegImg[0][-1:], 'None'))
+            # img = OriImg[:, :3, :, :]*OriImg[:, -1:, :, :]
+            plt.imshow(transform_invert(OriImg[0], trans.OriTrain))
             plt.show()
             # print(label)
             # print(mask.shape)

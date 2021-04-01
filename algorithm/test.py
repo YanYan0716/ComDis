@@ -53,13 +53,43 @@ def evalution(dataLoader, model):
     return acc1, acc2, correct_number1, correct_number2, total_number
 
 
+def evalution2(dataLoader, model):
+    total_number = 0
+    correct_number1 = 0
+    correct_number2 = 0
+    model.eval()
+    for idx, (anchor, img1, img2, mask, lable) in enumerate(dataLoader):
+        total_number += anchor.shape[0]
+        anchor, img1, img2, mask, lable = anchor.to(config.DEVICE), img1.to(config.DEVICE), img2.to(config.DEVICE), mask.to(
+            config.DEVICE), lable.to(config.DEVICE)
+
+        imgs = torch.cat([anchor, img2], dim=0)
+        out1 = model.model(imgs)
+        out1 = model.flatten(out1)
+        out1 = model.triplet(out1)
+
+        fts = torch.cat(
+            [
+                out1[:config.BATCH_SIZE],
+                out1[-config.BATCH_SIZE:]
+            ], dim=-1)
+        output = model.classifier(fts)
+        output = torch.sigmoid(output).ge(0.5).type(torch.float32).squeeze(dim=-1)
+        result = output.eq(mask).type(torch.float32)
+        correct_number1 += torch.sum(result)
+
+    acc1 = correct_number1 / total_number * 100
+    acc2 = correct_number2 / total_number * 100
+    return acc1, acc2, correct_number1, correct_number2, total_number
+
+
 if __name__ == '__main__':
     net = Model(fts_dim=config.FTS_DIM)
     checkpoint = torch.load(config.BEST_PATH, map_location='cpu')
     net.load_state_dict(checkpoint['model'])
     net.eval()
 
-    firstImg, firstImg_, secondImg = imageTrans('./test/465623.jpg', './test/465656.jpg')
+    firstImg, firstImg_, secondImg = imageTrans('./test/462093.jpg', './test/462168.jpg')
     plt.figure()
     plt.subplot(1, 3, 1)
     plt.imshow(transform_invert(firstImg[0], normlize))

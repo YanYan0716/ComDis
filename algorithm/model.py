@@ -66,6 +66,50 @@ class Model(nn.Module):
         return out1, out2,# out3
 
 
+class Model2(nn.Module):
+    def __init__(self, fts_dim=256):
+        super(Model, self).__init__()
+        try:
+            base = getattr(models, config.BACKBONE_ARCH)(pretrained=config.PRETRAIN_BACKARCH)
+            self.model = nn.Sequential(*list(base.children())[:-1])
+            self.base_output = base.fc.in_features
+        except:
+            raise ValueError('please check config.BACKBONE_ARCH ')
+        self.flatten = nn.Flatten()
+        self.triplet = nn.Linear(self.base_output, fts_dim)
+        self.classifier = nn.Sequential(
+            nn.Linear(fts_dim*2, fts_dim),
+            nn.ReLU(inplace=True),
+            nn.Linear(fts_dim, 1)
+        )
+
+    def forward(self, x, mask):
+        N = int(x.shape[0] / 4)
+        # 提特征
+        # x = self.conv(x)
+        x = self.model(x)
+        x = self.flatten(x)
+        # triplet
+        out = self.triplet(x)
+        ori = out[0:N]
+        pos1 = out[N:2*N]
+        pos2 = out[2*N:3*N]
+        neg = out[-N:]
+
+        # 二分类
+        classTensor = torch.zeros(size=(N, out.shape[-1]*2)).to(config.DEVICE)
+        out1_2 = torch.zeros(size=(N, out.shape[-1])).to(config.DEVICE)
+        for i in range(N):
+            if mask[i]:  # mask=1表示是同一类，[ori, pos1, pos2]
+                out1_2[i] = pos1[i]
+                classTensor[i] = torch.cat([ori[i], pos1[i], pos2[i]], dim=-1)
+            else:  # mask=0表示是不同类，[ori, pos1, neg]
+                out1_2[i] = pos1[i]
+                classTensor[i] = torch.cat([ori[i], pos1[i], neg[i]], dim=-1)
+        out2 = self.classifier(classTensor)
+        return (ori, out1_2), out2
+
+
 def test():
     x = torch.randn((2, 3, 224, 224))
     x = torch.cat([x, x, x, x], dim=0)

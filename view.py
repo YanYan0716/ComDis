@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 import algorithm.config as config
 from algorithm.TripletDataset import transform_invert
 from algorithm.model import Model
-from algorithm.trans import OriTest, Trans1, normlize
+from algorithm.trans import OriTest, Trans1, normlize, Trans2
 from U2net.U2model import U2NETP
 
 
@@ -64,7 +64,7 @@ def imageTrans(img1, img2):
     firstImg_ = normlize(firstImg_)
 
     img2 = Image.open(img2).convert('RGB')
-    secodeImg = OriTest(img2)
+    secodeImg = Trans2(img2)
     Img2Mask = genImgMask(secodeImg)
     # secodeImg = secodeImg * Img2Mask
     secodeImg = normlize(secodeImg)
