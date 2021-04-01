@@ -63,7 +63,7 @@ def evalution2(dataLoader, model):
         anchor, img1, img2, mask, lable = anchor.to(config.DEVICE), img1.to(config.DEVICE), img2.to(config.DEVICE), mask.to(
             config.DEVICE), lable.to(config.DEVICE)
 
-        imgs = torch.cat([anchor, img2], dim=0)
+        imgs = torch.cat([anchor,img1, img2], dim=0)
         out1 = model.model(imgs)
         out1 = model.flatten(out1)
         out1 = model.triplet(out1)
