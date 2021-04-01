@@ -6,7 +6,7 @@ import torch
 import matplotlib.pyplot as plt
 
 import algorithm.config as config
-from algorithm.model import Model
+from algorithm.model import Model, Model2
 from view import imageTrans, genImgMask
 from algorithm.trans import OriTest, Trans1, normlize
 from algorithm.TripletDataset import transform_invert
@@ -84,12 +84,12 @@ def evalution2(dataLoader, model):
 
 
 if __name__ == '__main__':
-    net = Model(fts_dim=config.FTS_DIM)
+    net = Model2(fts_dim=config.FTS_DIM)
     checkpoint = torch.load(config.BEST_PATH, map_location='cpu')
     net.load_state_dict(checkpoint['model'])
     net.eval()
 
-    firstImg, firstImg_, secondImg = imageTrans('./test/462093.jpg', './test/462168.jpg')
+    firstImg, firstImg_, secondImg = imageTrans('./test/463827.jpg', './test/463827.jpg')
     plt.figure()
     plt.subplot(1, 3, 1)
     plt.imshow(transform_invert(firstImg[0], normlize))
@@ -99,14 +99,14 @@ if __name__ == '__main__':
     plt.imshow(transform_invert(secondImg[0], normlize))
     plt.show()
 
-    imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
+    imgs = torch.cat([firstImg, secondImg], dim=0)
     with torch.no_grad():
         out1 = net.model(imgs)
         out1 = net.flatten(out1)
         out1 = net.triplet(out1)
-        fts = torch.cat([out1[:1], out1[1:2], out1[-1:]], dim=-1)
+        fts = torch.cat([out1[:1], out1[-1:]], dim=-1)
         output = net.classifier(fts)
-        output_ = torch.sigmoid(output).ge(0.51).type(torch.float32).squeeze(dim=-1)
+        output_ = torch.sigmoid(output).ge(0.50).type(torch.float32).squeeze(dim=-1)
         output_ = str(output_.numpy())
         out0 = str(torch.sigmoid(output).squeeze(dim=-1).detach().numpy())
         print(out0)

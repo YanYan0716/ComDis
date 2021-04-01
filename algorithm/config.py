@@ -16,9 +16,9 @@ U2WEITHS_DIR = './U2net/weights/u2netp.pth'
 U2NET = False
 
 # model
-BACKBONE_ARCH = 'resnet34'
+BACKBONE_ARCH = 'resnet18'
 PRETRAIN_BACKARCH = True
-FTS_DIM = 512
+FTS_DIM = 256
 ALPHA = 2
 BETAL = 1
 GAMMA = 1
@@ -43,4 +43,4 @@ CONTINUE_PATH = '../input/bestww/best.pth.tar'
 # TEST_PATH = '/content/cifar/test.csv'  # google
 # TEST_PATH = '.\\algorithm\\data\\train.csv'
 TEST_PATH = '../input/cifar10/cifar/test.csv'
-BEST_PATH = 'F:\\PROJECT\\ComDis\\weights\\best1.pth.tar'
+BEST_PATH = 'F:\\PROJECT\\ComDis\\weights\\best.pth.tar'

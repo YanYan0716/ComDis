@@ -55,19 +55,19 @@ def imageTrans(img1, img2):
     Img1Mask = genImgMask(firstImg)
     # firstImg = torch.cat([firstImg, Img1Mask], dim=0).unsqueeze(dim=0)
     # firstImg = firstImg * Img1Mask
-    firstImg = normlize(firstImg)
+    # firstImg = normlize(firstImg)
 
     firstImg_ = Trans1(img1)
     Img1Mask_ = genImgMask(firstImg_)
     # firstImg_ = torch.cat([firstImg_, Img1Mask_], dim=0).unsqueeze(dim=0)
     # firstImg_ = firstImg_ * Img1Mask
-    firstImg_ = normlize(firstImg_)
+    # firstImg_ = normlize(firstImg_)
 
     img2 = Image.open(img2).convert('RGB')
     secodeImg = Trans2(img2)
     Img2Mask = genImgMask(secodeImg)
     # secodeImg = secodeImg * Img2Mask
-    secodeImg = normlize(secodeImg)
+    # secodeImg = normlize(secodeImg)
 
     firstImg = firstImg.unsqueeze(dim=0)
     firstImg_ = firstImg_.unsqueeze(dim=0)
