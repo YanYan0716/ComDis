@@ -78,6 +78,8 @@ class Model2(nn.Module):
         self.flatten = nn.Flatten()
         self.triplet = nn.Linear(self.base_output, fts_dim)
         self.classifier = nn.Sequential(
+            nn.Linear(fts_dim * 3, fts_dim * 2),
+            nn.ReLU(inplace=True),
             nn.Linear(fts_dim*2, fts_dim),
             nn.ReLU(inplace=True),
             nn.Linear(fts_dim, 1)
@@ -102,10 +104,10 @@ class Model2(nn.Module):
         for i in range(N):
             if mask[i]:  # mask=1表示不同类
                 out1_2[i] = pos1[i]
-                classTensor[i] = torch.cat([ori[i], pos1[i]], dim=-1)
+                classTensor[i] = torch.cat([ori[i], pos1[i], pos2[i]], dim=-1)
             else:  # mask=0表示同类
                 out1_2[i] = neg[i]
-                classTensor[i] = torch.cat([ori[i], neg[i]], dim=-1)
+                classTensor[i] = torch.cat([ori[i], pos1[i], neg[i]], dim=-1)
         out2 = self.classifier(classTensor)
         return (ori, out1_2), out2
 
