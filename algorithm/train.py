@@ -11,7 +11,7 @@ import algorithm.config as config
 from algorithm.TripletDataset import TripletDataset
 from algorithm.model import Model, Model2
 from algorithm.utils import Cos_warmup, save_checkpoint
-from algorithm.test import evalution
+from algorithm.test import evalution, evalution2
 import algorithm.trans as trans
 from algorithm.contrastive import ContrastiveLoss
 
@@ -128,8 +128,7 @@ def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=
                 cLoss = cLoss / config.LOG_BATCHSIZE
                 c2Loss = c2Loss / config.LOG_BATCHSIZE
                 print(f'[epoch:%3d/' % (epoch) + 'EPOCH: %3d]' % config.TOTAL_EPOCH + '%4d:' % idx
-                      + ' [LOSS: %.4f]' % avgLoss + '[Trip Loss: %.4f' % tLoss + '/ Class Loss: %.4f]' % cLoss
-                      + ' / c2lass Loss: %.4f]' % c2Loss)
+                      + ' [LOSS: %.4f]' % avgLoss + '[Con Loss: %.4f' % tLoss + '/ Class Loss: %.4f]' % cLoss)
                 avgLoss = 0
                 tLoss = 0
                 cLoss = 0
@@ -137,7 +136,7 @@ def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=
         lrSche.step()
 
         if epoch % config.EVAL == 0:
-            acc, acc2, correct_number1, correct_number2, total_number = evalution(testDS, model)
+            acc, acc2, correct_number1, correct_number2, total_number = evalution2(testDS, model)
             if BAcc < acc:
                 BAcc = acc
                 state = {
