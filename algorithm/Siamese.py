@@ -26,6 +26,7 @@ class SiameseNetwork(nn.Module):
         return output
 
     def forward(self, input1, input2, input3, input4):
+
         N = int(input1.shape[0])
         input1_ = torch.zeros(size=input1.shape).to(config.DEVICE)
         for i in range(N):
@@ -35,8 +36,10 @@ class SiameseNetwork(nn.Module):
                 input1_[i] = input2[i]
 
         output1 = self.forward_once(input1)
-        output2 = self.forward_once(input1_)
-        return output1, output2
+        output1_ = self.forward_once(input1_)
+        output2 = self.forward_once(input2)
+        output3 = self.forward_once(input3)
+        return output1, output2, output3, output1_
 
 
 if __name__ == '__main__':

@@ -84,9 +84,9 @@ class Model2(nn.Module):
             # nn.Linear(fts_dim, 1)
         )#nn.Linear(self.base_output, fts_dim)
         self.classifier = nn.Sequential(
-            nn.Linear(fts_dim * 3, fts_dim * 2),
+            # nn.Linear(fts_dim * 3, fts_dim * 2),
             # nn.ReLU(inplace=True),
-            nn.Sigmoid(),
+            # nn.Sigmoid(),
             nn.Linear(fts_dim*2, fts_dim),
             # nn.ReLU(inplace=True),
             nn.Sigmoid(),

@@ -15,7 +15,7 @@ import algorithm.trans as trans
 from algorithm.contrastive import ContrastiveLoss
 
 
-def train(dataLoader, model, optim, Con_loss,  lrSche,):
+def train(dataLoader, model, optim, Trip_loss, Con_loss,  lrSche,):
     print(f'train 。。。 alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
     MinLoss = 1000
     for epoch in range(config.START_EPOCH, config.TOTAL_EPOCH):
@@ -30,8 +30,8 @@ def train(dataLoader, model, optim, Con_loss,  lrSche,):
             mask, label = mask.type(torch.float32).to(config.DEVICE), label.to(config.DEVICE)
 
             optim.zero_grad()
-            out1, out2, = model(anchor, pos1, neg, mask)
-            loss = Con_loss(out1, out2, mask) * config.ALPHA
+            out1, out2, out3, out1_ = model(anchor, pos1, neg, mask)
+            loss = Con_loss(out1, out1_, mask) + Trip_loss(out1, out2, out3)
 
             avgLoss += loss
             epochLoss += loss
@@ -83,7 +83,8 @@ def main():
         checkpoint = torch.load(config.CONTINUE_PATH, map_location=config.DEVICE)
         net.load_state_dict(checkpoint['model'])
     # loss
-    Triplet_loss = ContrastiveLoss()#  torch.nn.TripletMarginLoss(margin=0.8, p=2)
+    Con_loss = ContrastiveLoss()
+    Trip_loss = torch.nn.TripletMarginLoss(margin=0.8, p=2)
 
     # optimizer
     optim = torch.optim.Adam(
@@ -100,7 +101,8 @@ def main():
     train(
         dataLoader=train_loader,
         model=net,
-        Con_loss=Triplet_loss,
+        Trip_loss=Trip_loss,
+        Con_loss=Con_loss,
         optim=optim,
         lrSche=cosWarmUp,
     )

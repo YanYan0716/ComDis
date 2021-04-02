@@ -19,7 +19,7 @@ if __name__ == '__main__':
     net.load_state_dict(checkpoint['model'])
     net.eval()
 
-    firstImg, firstImg_, secondImg = imageTrans('./test/464265.jpg', './test/464265.jpg')
+    firstImg, firstImg_, secondImg = imageTrans('./test/461124.jpg', './test/461129.jpg')
     plt.figure()
     plt.subplot(1, 3, 1)
     plt.imshow(transform_invert(firstImg[0], normlize))
@@ -34,4 +34,5 @@ if __name__ == '__main__':
         out2 = net.forward_once(secondImg)
         euclidean_distance = F.pairwise_distance(out1, out2)
         print(euclidean_distance)
-        torch.nn.Sigmoid()
+        torch.nn.Dropout(p=0.2)
+        torch.nn.LeakyReLU
