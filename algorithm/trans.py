@@ -62,7 +62,7 @@ Trans1 = transforms.Compose([
     # AutoAugment(),
     transforms.RandomChoice([
         transforms.RandomHorizontalFlip(p=0.5),
-        transforms.RandomRotation(degrees=15, expand=True),
+        transforms.RandomRotation(degrees=5, expand=True),
         transforms.RandomOrder([
             transforms.ColorJitter(brightness=0.5),
             transforms.ColorJitter(saturation=0.5),
