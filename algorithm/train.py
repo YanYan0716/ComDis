@@ -205,7 +205,7 @@ def main():
     optim = torch.optim.Adam(
         params=[
             {'params': low_params},
-            {'params': net.model.parameters(), 'lr': config.LR*0.1}
+            {'params': net.model.parameters(), 'lr': config.LR}
         ],
         lr=config.LR,
         # momentum=config.MOMENTUM
