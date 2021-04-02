@@ -32,10 +32,7 @@ def train(dataLoader, model, optim, Con_loss,  lrSche,):
 
             optim.zero_grad()
             out1, out2, = model(imgs, mask)
-
-            Fts1 = out1[0]
-            Fts2 = out1[1]
-            loss = Con_loss(Fts1, Fts2, mask) * config.ALPHA
+            loss = Con_loss(out1, out2, mask) * config.ALPHA
 
             avgLoss += loss
             epochLoss += loss
