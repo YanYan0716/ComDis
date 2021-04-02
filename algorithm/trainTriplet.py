@@ -28,10 +28,9 @@ def train(dataLoader, model, optim, Con_loss,  lrSche,):
             length = idx
             anchor, pos1, pos2, neg = anchor.to(config.DEVICE), pos1.to(config.DEVICE), pos2.to(config.DEVICE), neg.to(config.DEVICE)
             mask, label = mask.type(torch.float32).to(config.DEVICE), label.to(config.DEVICE)
-            imgs = torch.cat([anchor, pos1, pos2, neg], dim=0)
 
             optim.zero_grad()
-            out1, out2, = model(imgs, mask)
+            out1, out2, = model(anchor, pos1, neg, mask)
             loss = Con_loss(out1, out2, mask) * config.ALPHA
 
             avgLoss += loss
