@@ -89,6 +89,7 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
 def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=None):
     print(f'train 。。。 alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
     MinLoss = 1000
+    BAcc = 0
     for epoch in range(config.START_EPOCH, config.TOTAL_EPOCH):
         model.train()
         epochLoss = 0
