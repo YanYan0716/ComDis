@@ -25,11 +25,11 @@ class SiameseNetwork(nn.Module):
         output = self.model(x)
         return output
 
-    def forward(self, input1, input2, input3):
+    def forward(self, input1, input2, input3, input4):
         N = int(input1.shape[0])
-        input1_ = torch.zeros(size=(input1.shape)).to(config.DEVICE)
+        input1_ = torch.zeros(size=input1.shape).to(config.DEVICE)
         for i in range(N):
-            if input3[i]:  # mask=1表示不同类
+            if input4[i]:  # mask=1表示不同类
                 input1_[i] = input3[i]
             else:  # mask=0表示同类
                 input1_[i] = input2[i]
