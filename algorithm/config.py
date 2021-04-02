@@ -26,7 +26,7 @@ CLASSES_NUM = 10
 
 # optimizer
 WARMUP_EPOCH = 0
-LR = 0.001
+LR = 0.0001
 MOMENTUM = 0.9
 
 # training
@@ -35,7 +35,7 @@ START_EPOCH = 0
 LOG_BATCHSIZE = 20
 EVAL = 1
 SAVE_PATH = './weights'
-CONTINUE = False
+CONTINUE = True
 CONTINUE_PATH = '../input/bestww/best.pth.tar'
 
 
