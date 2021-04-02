@@ -91,6 +91,7 @@ def main():
 
     # optimizer
     optim = torch.optim.Adam(
+        params=net.parameters(),
         lr=config.LR,
         # momentum=config.MOMENTUM
     )
