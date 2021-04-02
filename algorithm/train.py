@@ -116,7 +116,7 @@ def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=
             avgLoss += loss
             epochLoss += loss
             tLoss += loss1
-            # cLoss += loss2
+            cLoss += loss2
             loss.backward()
             optim.step()
 
