@@ -107,11 +107,11 @@ def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=
             Fts1 = out1[0]
             Fts2 = out1[1]
             loss1 = Con_loss(Fts1, Fts2, mask) * config.ALPHA
-            # out2 = out2.type(torch.float32)
-            # mask = mask.type(torch.float32)
-            # loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
+            out2 = out2.type(torch.float32)
+            mask = mask.type(torch.float32)
+            loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
 
-            loss = loss1#+loss2
+            loss = loss1+loss2
 
             avgLoss += loss
             epochLoss += loss
@@ -132,31 +132,29 @@ def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=
                 cLoss = 0
                 c2Loss = 0
         lrSche.step()
-        epochLoss = epochLoss / idx
-        print(f'MinLoss: {MinLoss}, epochLoss: {epochLoss}')
-        if MinLoss > epochLoss:
-            MinLoss = epochLoss
-            state = {
-                'epoch': epoch,
-                'model': model.state_dict()
-            }
-            save_checkpoint(state=state, savepath=config.SAVE_PATH)
-            print(f'saving model to {config.SAVE_PATH} ..........................')
-
-
-        # if epoch % config.EVAL == 0:
-        #     acc, acc2, correct_number1, correct_number2, total_number = evalution2(testDS, model)
-        #     if BAcc < acc:
-        #         BAcc = acc
-        #         state = {
-        #             'epoch': epoch,
-        #             'model': model.state_dict()
-        #         }
-        #         save_checkpoint(state=state, savepath=config.SAVE_PATH)
-        #         print(f'saving model to {config.SAVE_PATH} ..........................')
-        #     print(f'eval \t [acc: %.2f' % acc + '/ BAcc: %.4f]' % BAcc
-        #           + '[corr_num: %5d' % correct_number1 + '/ total num: %6d]' % total_number
-        #           + '[class acc: %.2f' % acc2 + 'corr_num: %5d]' % correct_number2)
+        # epochLoss = epochLoss / idx
+        # print(f'MinLoss: {MinLoss}, epochLoss: {epochLoss}')
+        # if MinLoss > epochLoss:
+        #     MinLoss = epochLoss
+        #     state = {
+        #         'epoch': epoch,
+        #         'model': model.state_dict()
+        #     }
+        #     save_checkpoint(state=state, savepath=config.SAVE_PATH)
+        #     print(f'saving model to {config.SAVE_PATH} ..........................')
+        if epoch % config.EVAL == 0:
+            acc, acc2, correct_number1, correct_number2, total_number = evalution2(testDS, model)
+            if BAcc < acc:
+                BAcc = acc
+                state = {
+                    'epoch': epoch,
+                    'model': model.state_dict()
+                }
+                save_checkpoint(state=state, savepath=config.SAVE_PATH)
+                print(f'saving model to {config.SAVE_PATH} ..........................')
+            print(f'eval \t [acc: %.2f' % acc + '/ BAcc: %.4f]' % BAcc
+                  + '[corr_num: %5d' % correct_number1 + '/ total num: %6d]' % total_number
+                  + '[class acc: %.2f' % acc2 + 'corr_num: %5d]' % correct_number2)
 
 
 def main():
