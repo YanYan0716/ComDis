@@ -203,13 +203,13 @@ def main():
     # optimizer
     base_params = list(map(id, net.model.parameters()))
     low_params = filter(lambda p: id(p) not in base_params, net.parameters())
-    optim = torch.optim.SGD(
+    optim = torch.optim.Adam(
         params=[
             {'params': low_params},
-            {'params': net.model.parameters(), 'lr': config.LR*1}
+            {'params': net.model.parameters(), 'lr': config.LR*0.1}
         ],
         lr=config.LR,
-        momentum=config.MOMENTUM
+        # momentum=config.MOMENTUM
     )
     cosWarmUp = Cos_warmup(
         optim,

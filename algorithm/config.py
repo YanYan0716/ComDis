@@ -35,7 +35,7 @@ START_EPOCH = 0
 LOG_BATCHSIZE = 20
 EVAL = 1
 SAVE_PATH = './weights'
-CONTINUE = True
+CONTINUE = False
 CONTINUE_PATH = '../input/bestww/best.pth.tar'
 
 
