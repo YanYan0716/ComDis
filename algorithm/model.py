@@ -77,13 +77,12 @@ class Model2(nn.Module):
             raise ValueError('please check config.BACKBONE_ARCH ')
         self.flatten = nn.Flatten()
         self.triplet = nn.Sequential(
-            nn.Linear(self.base_output, fts_dim*3),
-            # nn.Linear(fts_dim * 3, fts_dim * 2),
+            nn.Linear(self.base_output, fts_dim * 2),
             nn.ReLU(inplace=True),
-            nn.Linear(fts_dim * 2, fts_dim),
+            nn.Linear(fts_dim*2, fts_dim),
             # nn.ReLU(inplace=True),
             # nn.Linear(fts_dim, 1)
-        )
+        )#nn.Linear(self.base_output, fts_dim)
         self.classifier = nn.Sequential(
             nn.Linear(fts_dim * 3, fts_dim * 2),
             nn.ReLU(inplace=True),
