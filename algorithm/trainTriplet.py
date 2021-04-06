@@ -31,8 +31,7 @@ def train(dataLoader, model, optim, Trip_loss, Con_loss,  lrSche,):
 
             optim.zero_grad()
             out1, out2, out3, out1_ = model(anchor, pos1, neg, mask)
-            loss = Con_loss(out1, out1_, mask) + Trip_loss(out1, out2, out3)
-
+            loss = (Con_loss(out1, out1_, mask) + Trip_loss(out1, out2, out3)) / 2
             avgLoss += loss
             epochLoss += loss
             tLoss += loss
