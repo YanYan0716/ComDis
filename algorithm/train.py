@@ -43,8 +43,7 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
             loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
-            # loss3 = class2_loss(out3, label)*config.GAMMA
-            loss = loss1+loss2#+loss3
+            loss = loss2#+loss3
 
             avgLoss += loss
             epochLoss += loss
@@ -101,18 +100,18 @@ def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=
             optim.zero_grad()
             out1, out2, = model(imgs, mask)
 
-            Fts1 = out1[0]
-            Fts2 = out1[1]
-            loss1 = Con_loss(Fts1, Fts2, mask) * config.ALPHA
+            # Fts1 = out1[0]
+            # Fts2 = out1[1]
+            # loss1 = Con_loss(Fts1, Fts2, mask) * config.ALPHA
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
             loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
 
-            loss = loss1+loss2
+            loss = loss2
 
             avgLoss += loss
             epochLoss += loss
-            tLoss += loss1
+            # tLoss += loss1
             cLoss += loss2
             loss.backward()
             optim.step()
@@ -192,7 +191,7 @@ def main():
         checkpoint = torch.load(config.CONTINUE_PATH, map_location=config.DEVICE)
         net.load_state_dict(checkpoint['model'])
     # loss
-    Triplet_loss = ContrastiveLoss()#  torch.nn.TripletMarginLoss(margin=0.8, p=2)
+    Triplet_loss = None #ContrastiveLoss()#  torch.nn.TripletMarginLoss(margin=0.8, p=2)
     Classifier_loss = torch.nn.BCEWithLogitsLoss()
     class2_loss = torch.nn.CrossEntropyLoss()
     # optimizer
