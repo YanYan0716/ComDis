@@ -62,7 +62,7 @@ Trans1 = transforms.Compose([
     # AutoAugment(),
     transforms.RandomChoice([
             transforms.RandomHorizontalFlip(p=0.5),
-            transforms.RandomRotation(degrees=15, expand=True),
+            transforms.RandomRotation(degrees=10, expand=True),
             transforms.RandomCrop((config.CROP_SIZE, config.CROP_SIZE)),
             transforms.RandomOrder([
                 transforms.ColorJitter(brightness=0.1),
@@ -82,7 +82,7 @@ Trans2 = transforms.Compose([
     # AutoAugment(),
     transforms.RandomChoice([
             transforms.RandomHorizontalFlip(p=0.5),
-            transforms.RandomRotation(degrees=15, expand=True),
+            transforms.RandomRotation(degrees=10, expand=True),
             transforms.RandomCrop((config.CROP_SIZE, config.CROP_SIZE)),
             transforms.RandomOrder([
                 transforms.ColorJitter(brightness=0.1),

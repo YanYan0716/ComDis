@@ -90,7 +90,20 @@ if __name__ == '__main__':
     net.load_state_dict(checkpoint['model'])
     net.eval()
 
-    firstImg, firstImg_, secondImg = imageTrans('461773.jpg', '461783.jpg')
+    firstImg, firstImg_, secondImg = imageTrans('./test/2777520.jpg', './test/2777520.jpg')
+
+    imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
+    with torch.no_grad():
+        out1 = net.model(imgs)
+        out1 = net.flatten(out1)
+        out1 = net.triplet(out1)
+        fts = torch.cat([out1[0,], out1[1,], out1[2,]], dim=-1).unsqueeze(dim=0)
+        # print(fts.shape)
+        output = net.classifier(fts)
+        output_ = torch.sigmoid(output).ge(0.50).type(torch.float32).squeeze(dim=-1)
+        output_ = str(output_.numpy())
+        out0 = str(torch.sigmoid(output).squeeze(dim=-1).detach().numpy())
+        print(out0)
     plt.figure()
     plt.subplot(1, 3, 1)
     plt.imshow(transform_invert(firstImg[0], normlize))
@@ -99,15 +112,3 @@ if __name__ == '__main__':
     plt.subplot(1, 3, 3)
     plt.imshow(transform_invert(secondImg[0], normlize))
     plt.show()
-
-    imgs = torch.cat([firstImg, secondImg], dim=0)
-    with torch.no_grad():
-        out1 = net.model(imgs)
-        out1 = net.flatten(out1)
-        out1 = net.triplet(out1)
-        fts = torch.cat([out1[:1], out1[-1:]], dim=-1)
-        output = net.classifier(fts)
-        output_ = torch.sigmoid(output).ge(0.50).type(torch.float32).squeeze(dim=-1)
-        output_ = str(output_.numpy())
-        out0 = str(torch.sigmoid(output).squeeze(dim=-1).detach().numpy())
-        print(out0)

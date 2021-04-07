@@ -191,7 +191,7 @@ def main():
         checkpoint = torch.load(config.CONTINUE_PATH, map_location=config.DEVICE)
         net.load_state_dict(checkpoint['model'])
     # loss
-    Triplet_loss = None #ContrastiveLoss()#  torch.nn.TripletMarginLoss(margin=0.8, p=2)
+    Triplet_loss = ContrastiveLoss()#  torch.nn.TripletMarginLoss(margin=0.8, p=2)
     Classifier_loss = torch.nn.BCEWithLogitsLoss()
     class2_loss = torch.nn.CrossEntropyLoss()
     # optimizer
