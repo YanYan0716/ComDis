@@ -100,18 +100,18 @@ def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=
             optim.zero_grad()
             out1, out2, = model(imgs, mask)
 
-            # Fts1 = out1[0]
-            # Fts2 = out1[1]
-            # loss1 = Con_loss(Fts1, Fts2, mask) * config.ALPHA
+            Fts1 = out1[0]
+            Fts2 = out1[1]
+            loss1 = Con_loss(Fts1, Fts2, mask) * config.ALPHA
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
             loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
 
-            loss = loss2
+            loss = loss1 + loss2
 
             avgLoss += loss
             epochLoss += loss
-            # tLoss += loss1
+            tLoss += loss1
             cLoss += loss2
             loss.backward()
             optim.step()
