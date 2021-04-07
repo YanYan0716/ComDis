@@ -29,10 +29,6 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
         c2Loss = 0
         for idx, (anchor, pos1, pos2, neg, mask, label) in enumerate(dataLoader):
             anchor, pos1, pos2, neg = anchor.to(config.DEVICE), pos1.to(config.DEVICE), pos2.to(config.DEVICE), neg.to(config.DEVICE)
-            # anchor = anchor[:, :3, :, :] * anchor[:, -1:, :, :]
-            # pos1 = pos1[:, :3, :, :] * pos1[:, -1:, :, :]
-            # pos2 = pos2[:, :3, :, :] * pos2[:, -1:, :, :]
-            # neg = neg[:, :3, :, :] * neg[:, -1:, :, :]
 
             mask, label = mask.to(config.DEVICE), label.to(config.DEVICE)
             imgs = torch.cat([anchor, pos1, pos2, neg], dim=0)
@@ -201,15 +197,18 @@ def main():
     class2_loss = torch.nn.CrossEntropyLoss()
     # optimizer
     base_params = list(map(id, net.model.parameters()))
-    low_params = filter(lambda p: id(p) not in base_params, net.parameters())
+    triplet_params = list(map(id, net.triplet.parameters()))
+    classes_params = filter(lambda p: id(p) not in base_params+triplet_params, net.parameters())
     optim = torch.optim.Adam(
         params=[
-            {'params': low_params},
-            {'params': net.model.parameters(), 'lr': config.LR*10}
+            {'params': net.model.parameters()},
+            {'params': net.triplet.parameters(), 'lr': config.LR*10},
+            {'params': classes_params, 'lr': config.LR*30},
         ],
         lr=config.LR,
-        # momentum=config.MOMENTUM
+        #momentum=config.MOMENTUM
     )
+
     cosWarmUp = Cos_warmup(
         optim,
         epoch_warmup=config.WARMUP_EPOCH,

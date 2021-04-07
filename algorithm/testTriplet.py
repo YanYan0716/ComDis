@@ -32,7 +32,7 @@ if __name__ == '__main__':
     classifier.load_state_dict(checkpoint['model'])
     classifier.eval()
 
-    firstImg, firstImg_, secondImg = imageTrans('./test/461868.jpg', './test/461868.jpg')
+    firstImg, firstImg_, secondImg = imageTrans('./test/461490.jpg', './test/461439.jpg')
     plt.figure()
     plt.subplot(1, 3, 1)
     plt.imshow(transform_invert(firstImg[0], normlize))
@@ -60,7 +60,7 @@ if __name__ == '__main__':
         dis1 = F.pairwise_distance(out1, out2)
         dis2 = F.pairwise_distance(out1, out3)
         # print(dis2)
-        if dis1>=(dis2):
+        if (dis1*1.2)>=(dis2):
             print('same')
         else:
             print('diff')

@@ -80,16 +80,12 @@ class Model2(nn.Module):
             nn.Linear(self.base_output, fts_dim * 2),
             nn.ReLU(inplace=True),
             nn.Linear(fts_dim*2, fts_dim),
-            # nn.ReLU(inplace=True),
-            # nn.Linear(fts_dim, 1)
-        )#nn.Linear(self.base_output, fts_dim)
+        )
         self.classifier = nn.Sequential(
-            # nn.Linear(fts_dim * 3, fts_dim * 2),
-            # nn.ReLU(inplace=True),
-            # nn.Sigmoid(),
+            nn.Linear(fts_dim * 3, fts_dim * 2),
+            nn.ReLU(inplace=True),
             nn.Linear(fts_dim*2, fts_dim),
-            # nn.ReLU(inplace=True),
-            nn.Sigmoid(),
+            nn.ReLU(inplace=True),
             nn.Linear(fts_dim, 1)
         )
 
@@ -125,11 +121,6 @@ def test():
     x = torch.cat([x, x, x, x], dim=0)
     print(x.shape)
     M = Model(fts_dim=config.FTS_DIM)
-    # state = {
-    #     'epoch': 3,
-    #     'model': M.state_dict()
-    # }
-    # save_checkpoint(state, config.SAVE_PATH)
     out1, out2,  = M(x, torch.tensor([1, 0]))
     print(out1.shape, out2.shape, )
 
