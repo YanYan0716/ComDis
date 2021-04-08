@@ -26,7 +26,7 @@ CLASSES_NUM = 10
 
 # optimizer
 WARMUP_EPOCH = 0
-LR = 1e-5
+LR = 1e-6
 MOMENTUM = 0.9
 
 # training

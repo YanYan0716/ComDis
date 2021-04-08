@@ -90,7 +90,7 @@ if __name__ == '__main__':
     net.load_state_dict(checkpoint['model'])
     net.eval()
 
-    firstImg, firstImg_, secondImg = imageTrans('./test/1646233.jpg', './test/1646233.jpg')
+    firstImg, firstImg_, secondImg = imageTrans('./test/462847.jpg', './test/462857.jpg')
 
     imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
     with torch.no_grad():

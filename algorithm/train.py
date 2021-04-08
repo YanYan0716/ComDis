@@ -202,7 +202,7 @@ def main():
         params=[
             {'params': net.model.parameters()},
             {'params': net.triplet.parameters(), 'lr': config.LR*10},
-            {'params': classes_params, 'lr': config.LR*30},
+            {'params': classes_params, 'lr': config.LR*10},
         ],
         lr=config.LR,
         #momentum=config.MOMENTUM
