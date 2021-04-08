@@ -67,7 +67,7 @@ def testCos_warmup():
 
 
 def EarnName():
-    path = "./test"
+    path = "./Dataset"
     original_images = []
     pict_name = open('name.txt', 'w+')
     for root, dirs, filenames in os.walk(path):
@@ -95,6 +95,7 @@ def Resize(imgPath):
 if __name__ == '__main__':
     # testCos_warmup()
     # EarnName()
+
     img_path = open('name.txt', 'r').readlines()
     for i in range(len(img_path)):
         imgpath = img_path[i].split()[0]

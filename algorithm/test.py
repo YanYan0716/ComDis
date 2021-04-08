@@ -1,4 +1,5 @@
 import sys
+
 sys.path.append('/content/ComDis')
 sys.path.append('./')
 sys.path.append('./ComDis')
@@ -19,7 +20,8 @@ def evalution(dataLoader, model):
     model.eval()
     for idx, (anchor, img1, img2, mask, lable) in enumerate(dataLoader):
         total_number += anchor.shape[0]
-        anchor, img1, img2, mask, lable = anchor.to(config.DEVICE), img1.to(config.DEVICE), img2.to(config.DEVICE), mask.to(
+        anchor, img1, img2, mask, lable = anchor.to(config.DEVICE), img1.to(config.DEVICE), img2.to(
+            config.DEVICE), mask.to(
             config.DEVICE), lable.to(config.DEVICE)
         # anchor = anchor[:, :3, :, :] * anchor[:, -1:, :, :]
         # img1 = img1[:, :3, :, :] * img1[:, -1:, :, :]
@@ -60,10 +62,11 @@ def evalution2(dataLoader, model):
     model.eval()
     for idx, (anchor, img1, img2, mask, lable) in enumerate(dataLoader):
         total_number += anchor.shape[0]
-        anchor, img1, img2, mask, lable = anchor.to(config.DEVICE), img1.to(config.DEVICE), img2.to(config.DEVICE), mask.to(
+        anchor, img1, img2, mask, lable = anchor.to(config.DEVICE), img1.to(config.DEVICE), img2.to(
+            config.DEVICE), mask.to(
             config.DEVICE), lable.to(config.DEVICE)
 
-        imgs = torch.cat([anchor,img1, img2], dim=0)
+        imgs = torch.cat([anchor, img1, img2], dim=0)
         out1 = model.model(imgs)
         out1 = model.flatten(out1)
         out1 = model.triplet(out1)
@@ -71,7 +74,7 @@ def evalution2(dataLoader, model):
         fts = torch.cat(
             [
                 out1[:config.BATCH_SIZE],
-                out1[config.BATCH_SIZE*1:config.BATCH_SIZE*2],
+                out1[config.BATCH_SIZE * 1:config.BATCH_SIZE * 2],
                 out1[-config.BATCH_SIZE:]
             ], dim=-1)
         output = model.classifier(fts)
@@ -90,7 +93,7 @@ if __name__ == '__main__':
     net.load_state_dict(checkpoint['model'])
     net.eval()
 
-    firstImg, firstImg_, secondImg = imageTrans('./test/462847.jpg', './test/462857.jpg')
+    firstImg, firstImg_, secondImg = imageTrans('./464265.jpg', './464305.jpg')
 
     imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
     with torch.no_grad():
@@ -100,6 +103,7 @@ if __name__ == '__main__':
         fts = torch.cat([out1[0,], out1[1,], out1[2,]], dim=-1).unsqueeze(dim=0)
         # print(fts.shape)
         output = net.classifier(fts)
+        print(output)
         output_ = torch.sigmoid(output).ge(0.50).type(torch.float32).squeeze(dim=-1)
         output_ = str(output_.numpy())
         out0 = str(torch.sigmoid(output).squeeze(dim=-1).detach().numpy())
