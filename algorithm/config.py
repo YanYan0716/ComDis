@@ -16,8 +16,8 @@ U2WEITHS_DIR = './U2net/weights/u2netp.pth'
 U2NET = False
 
 # model
-BACKBONE_ARCH = 'resnet18'
-PRETRAIN_BACKARCH = True
+BACKBONE_ARCH = 'resnet34'
+PRETRAIN_BACKARCH = False
 FTS_DIM = 256
 ALPHA = 1
 BETAL = 1

@@ -78,14 +78,14 @@ class Model2(nn.Module):
         self.flatten = nn.Flatten()
         self.triplet = nn.Sequential(
             nn.Linear(self.base_output, fts_dim * 2),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
             nn.Linear(fts_dim*2, fts_dim),
         )
         self.classifier = nn.Sequential(
             nn.Linear(fts_dim * 3, fts_dim * 2),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
             nn.Linear(fts_dim*2, fts_dim),
-            nn.ReLU(inplace=True),
+            nn.LeakyReLU(inplace=True),
             nn.Linear(fts_dim, 1)
         )
 
@@ -121,11 +121,17 @@ def test():
     x = torch.cat([x, x, x, x], dim=0)
     print(x.shape)
     M = Model(fts_dim=config.FTS_DIM)
-    out1, out2,  = M(x, torch.tensor([1, 0]))
-    print(out1.shape, out2.shape, )
+    print(M.flatten(M.model(x)).shape)
+    # out1, out2,  = M(x, torch.tensor([1, 0]))
+    #
+    # print(out1.shape, out2.shape, )
 
 
 if __name__ == '__main__':
-    test()
-    # a=models.resnet18()
+    # test()
+    M = Model(fts_dim=config.FTS_DIM)
+    for para in M.flatten.parameters():
+        para.requires_grad = False
+        print(para.requires_grad)
     # nn.Conv2d()
+    nn.LeakyReLU(inplace=True)

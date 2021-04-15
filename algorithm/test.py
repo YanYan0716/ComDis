@@ -93,7 +93,7 @@ if __name__ == '__main__':
     net.load_state_dict(checkpoint['model'])
     net.eval()
 
-    firstImg, firstImg_, secondImg = imageTrans('./464265.jpg', './464305.jpg')
+    firstImg, firstImg_, secondImg = imageTrans('./test/464029.jpg', './test/464034.jpg')
 
     imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
     with torch.no_grad():
@@ -103,11 +103,19 @@ if __name__ == '__main__':
         fts = torch.cat([out1[0,], out1[1,], out1[2,]], dim=-1).unsqueeze(dim=0)
         # print(fts.shape)
         output = net.classifier(fts)
-        print(output)
+        # print(output)
         output_ = torch.sigmoid(output).ge(0.50).type(torch.float32).squeeze(dim=-1)
         output_ = str(output_.numpy())
         out0 = str(torch.sigmoid(output).squeeze(dim=-1).detach().numpy())
         print(out0)
+
+        # fts = torch.cat([out1[0,], out1[2,]], dim=-1).unsqueeze(dim=0)
+        # output = net.classifier(fts)
+        # output_ = torch.sigmoid(output).ge(0.50).type(torch.float32).squeeze(dim=-1)
+        # output_ = str(output_.numpy())
+        # out0 = str(torch.sigmoid(output).squeeze(dim=-1).detach().numpy())
+        # print(out0)
+
     plt.figure()
     plt.subplot(1, 3, 1)
     plt.imshow(transform_invert(firstImg[0], normlize))

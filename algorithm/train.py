@@ -1,11 +1,11 @@
 import sys
+
 sys.path.append('/content/ComDis')
 sys.path.append('./')
 sys.path.append('./ComDis')
 import torch
 import torchvision.transforms as transforms
 import torch.utils.data as data
-
 
 import algorithm.config as config
 from algorithm.TripletDataset import TripletDataset
@@ -16,8 +16,9 @@ import algorithm.trans as trans
 from algorithm.contrastive import ContrastiveLoss
 
 
-def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss,  lrSche, testDS=None):
-    print(f'train 。。。 alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
+def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, lrSche, testDS=None):
+    print(
+        f'train 。。。 alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
     # acc, acc2, correct_number1, correct_number2, total_number = evalution(testDS, model)
     BAcc = 0
     for epoch in range(config.START_EPOCH, config.TOTAL_EPOCH):
@@ -28,7 +29,8 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
         cLoss = 0
         c2Loss = 0
         for idx, (anchor, pos1, pos2, neg, mask, label) in enumerate(dataLoader):
-            anchor, pos1, pos2, neg = anchor.to(config.DEVICE), pos1.to(config.DEVICE), pos2.to(config.DEVICE), neg.to(config.DEVICE)
+            anchor, pos1, pos2, neg = anchor.to(config.DEVICE), pos1.to(config.DEVICE), pos2.to(config.DEVICE), neg.to(
+                config.DEVICE)
 
             mask, label = mask.to(config.DEVICE), label.to(config.DEVICE)
             imgs = torch.cat([anchor, pos1, pos2, neg], dim=0)
@@ -36,14 +38,14 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
             optim.zero_grad()
             out1, out2, = model(imgs, mask)
 
-            anchorFts = out1[ :config.BATCH_SIZE]
-            posFts = out1[config.BATCH_SIZE : config.BATCH_SIZE*2]
-            negFts = out1[-config.BATCH_SIZE: ]
+            anchorFts = out1[:config.BATCH_SIZE]
+            posFts = out1[config.BATCH_SIZE: config.BATCH_SIZE * 2]
+            negFts = out1[-config.BATCH_SIZE:]
             loss1 = Triplet_loss(anchorFts, posFts, negFts) * config.ALPHA
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
-            loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
-            loss = loss2#+loss3
+            loss2 = Classifier_loss(out2.squeeze(dim=-1), mask) * config.BETAL
+            loss = loss2  # +loss3
 
             avgLoss += loss
             epochLoss += loss
@@ -81,8 +83,9 @@ def train(dataLoader, model, optim, Triplet_loss, Classifier_loss, class2_loss, 
                   + '[class acc: %.2f' % acc2 + 'corr_num: %5d]' % correct_number2)
 
 
-def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=None):
-    print(f'train 。。。 alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
+def train2(dataLoader, model, optim, Con_loss, Classifier_loss, lrSche, testDS=None):
+    print(
+        f'train 。。。 alpha: {config.ALPHA}, betal: {config.BETAL}, gamma: {config.GAMMA}, lr: {config.LR}, classes: {config.CLASSES_NUM}')
     MinLoss = 1000
     BAcc = 0
     for epoch in range(config.START_EPOCH, config.TOTAL_EPOCH):
@@ -93,7 +96,8 @@ def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=
         cLoss = 0
         c2Loss = 0
         for idx, (anchor, pos1, pos2, neg, mask, label) in enumerate(dataLoader):
-            anchor, pos1, pos2, neg = anchor.to(config.DEVICE), pos1.to(config.DEVICE), pos2.to(config.DEVICE), neg.to(config.DEVICE)
+            anchor, pos1, pos2, neg = anchor.to(config.DEVICE), pos1.to(config.DEVICE), pos2.to(config.DEVICE), neg.to(
+                config.DEVICE)
             mask, label = mask.type(torch.float32).to(config.DEVICE), label.to(config.DEVICE)
             imgs = torch.cat([anchor, pos1, pos2, neg], dim=0)
 
@@ -105,7 +109,7 @@ def train2(dataLoader, model, optim, Con_loss, Classifier_loss,  lrSche, testDS=
             loss1 = Con_loss(Fts1, Fts2, mask) * config.ALPHA
             out2 = out2.type(torch.float32)
             mask = mask.type(torch.float32)
-            loss2 = Classifier_loss(out2.squeeze(dim=-1), mask)*config.BETAL
+            loss2 = Classifier_loss(out2.squeeze(dim=-1), mask) * config.BETAL
 
             loss = loss1 + loss2
 
@@ -168,7 +172,14 @@ def main():
         train=True
     )
 
-    train_loader = data.DataLoader(DS, batch_size=config.BATCH_SIZE, shuffle=True, drop_last=True)
+    train_loader = data.DataLoader(
+        DS,
+        batch_size=config.BATCH_SIZE,
+        shuffle=True,
+        drop_last=True,
+        pin_memory=True,
+        num_workers=4
+    )
 
     test_trans = {
         'OriTrans': trans.OriTest,
@@ -182,7 +193,14 @@ def main():
         train=False
     )
 
-    test_loader = data.DataLoader(DS_eval, batch_size=config.BATCH_SIZE, shuffle=True, drop_last=True)
+    test_loader = data.DataLoader(
+        DS_eval,
+        batch_size=config.BATCH_SIZE,
+        shuffle=True,
+        drop_last=True,
+        pin_memory=True,
+        num_workers=4
+    )
 
     # model
     net = Model2(fts_dim=config.FTS_DIM).to(config.DEVICE)
@@ -191,21 +209,22 @@ def main():
         checkpoint = torch.load(config.CONTINUE_PATH, map_location=config.DEVICE)
         net.load_state_dict(checkpoint['model'])
     # loss
-    Triplet_loss = ContrastiveLoss()#  torch.nn.TripletMarginLoss(margin=0.8, p=2)
+    Triplet_loss = ContrastiveLoss()  # torch.nn.TripletMarginLoss(margin=0.8, p=2)
     Classifier_loss = torch.nn.BCEWithLogitsLoss()
     class2_loss = torch.nn.CrossEntropyLoss()
     # optimizer
     base_params = list(map(id, net.model.parameters()))
+
     triplet_params = list(map(id, net.triplet.parameters()))
-    classes_params = filter(lambda p: id(p) not in base_params+triplet_params, net.parameters())
+    classes_params = filter(lambda p: id(p) not in base_params + triplet_params, net.parameters())
     optim = torch.optim.Adam(
         params=[
             {'params': net.model.parameters()},
-            {'params': net.triplet.parameters(), 'lr': config.LR*10},
-            {'params': classes_params, 'lr': config.LR*10},
+            {'params': net.triplet.parameters(), 'lr': config.LR * 10},
+            {'params': classes_params, 'lr': config.LR * 10},
         ],
         lr=config.LR,
-        #momentum=config.MOMENTUM
+        # momentum=config.MOMENTUM
     )
 
     cosWarmUp = Cos_warmup(
