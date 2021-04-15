@@ -5,6 +5,7 @@ sys.path.append('./')
 sys.path.append('./ComDis')
 import torch
 import matplotlib.pyplot as plt
+import torch.nn.functional as F
 
 import algorithm.config as config
 from algorithm.model import Model, Model2
@@ -93,15 +94,20 @@ if __name__ == '__main__':
     net.load_state_dict(checkpoint['model'])
     net.eval()
 
-    firstImg, firstImg_, secondImg = imageTrans('./test/464029.jpg', './test/464034.jpg')
+    secondImg, firstImg, firstImg_ = imageTrans('./test/467131.jpg', './461808.jpg')
 
     imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
     with torch.no_grad():
         out1 = net.model(imgs)
         out1 = net.flatten(out1)
         out1 = net.triplet(out1)
+
+        a1 = F.pairwise_distance(out1[0,].unsqueeze(dim=0), out1[1,].unsqueeze(dim=0),)
+        a2 = F.pairwise_distance(out1[0,].unsqueeze(dim=0), out1[2,].unsqueeze(dim=0), )
+        a3 = F.pairwise_distance(out1[1,].unsqueeze(dim=0), out1[2,].unsqueeze(dim=0),)
+        print(a1, a2, a3)
+
         fts = torch.cat([out1[0,], out1[1,], out1[2,]], dim=-1).unsqueeze(dim=0)
-        # print(fts.shape)
         output = net.classifier(fts)
         # print(output)
         output_ = torch.sigmoid(output).ge(0.50).type(torch.float32).squeeze(dim=-1)

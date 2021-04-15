@@ -72,6 +72,7 @@ def imageTrans(img1, img2):
     firstImg = firstImg.unsqueeze(dim=0)
     firstImg_ = firstImg_.unsqueeze(dim=0)
     secodeImg = secodeImg.unsqueeze(dim=0)
+
     return firstImg, firstImg_, secodeImg
 
 
