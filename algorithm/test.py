@@ -94,7 +94,7 @@ if __name__ == '__main__':
     net.load_state_dict(checkpoint['model'])
     net.eval()
 
-    secondImg, firstImg, firstImg_ = imageTrans('./test/467131.jpg', './461808.jpg')
+    firstImg, firstImg_, secondImg = imageTrans('./test/2767951.jpg', './test/2768035.jpg')
 
     imgs = torch.cat([firstImg, firstImg_, secondImg], dim=0)
     with torch.no_grad():
@@ -129,4 +129,5 @@ if __name__ == '__main__':
     plt.imshow(transform_invert(firstImg_[0], normlize))
     plt.subplot(1, 3, 3)
     plt.imshow(transform_invert(secondImg[0], normlize))
+    plt.title(out0)
     plt.show()
